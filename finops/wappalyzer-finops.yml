@@ -1,0 +1,127 @@
+name: Wappalyzer FinOps Framework
+description: FinOps Framework 1.0 FOCUS-aligned cost management profile for Wappalyzer API consumption, covering cost visibility, optimization, and governance for technographic data workloads.
+version: '1.0'
+url: https://www.wappalyzer.com/pricing/
+
+provider: Wappalyzer
+service: Technology Detection API
+
+billingModel:
+  type: subscription-plus-credits
+  description: Monthly subscription plan provides a base credit allocation; additional credits can be purchased as bundles at extra cost
+  currency: USD
+  billingCycles:
+    - monthly
+    - annual (17% discount)
+
+costDrivers:
+  - name: Plan Subscription
+    description: Recurring monthly or annual fee for the chosen plan tier
+    type: fixed
+    unit: month
+    plans:
+      - name: Free
+        monthlyCost: 0
+      - name: Pro
+        monthlyCost: 250
+      - name: Business
+        monthlyCost: 450
+      - name: Enterprise
+        monthlyCostMinimum: 850
+
+  - name: API Credit Consumption
+    description: Credits consumed per URL lookup; rate varies by lookup type (cached vs. live recursive)
+    type: variable
+    unit: credit
+    rates:
+      - operation: Standard cached lookup
+        creditsPerUnit: 1
+        unitDescription: per URL
+      - operation: Live recursive crawl
+        creditsPerUnit: 5
+        unitDescription: per URL
+
+  - name: Additional Credit Bundles
+    description: Supplementary credits purchased outside the plan allocation when monthly quota is insufficient
+    type: variable
+    unit: credit bundle
+    expiry: 365 days
+    notes: Priced on request; contact Wappalyzer sales
+
+costAllocation:
+  dimensions:
+    - name: API Endpoint
+      values:
+        - Lookup API
+        - Analyze API
+        - Crawl API
+        - Dataset API
+    - name: Lookup Mode
+      values:
+        - cached (1 credit/URL)
+        - live single-page (1 credit/URL)
+        - live recursive (5 credits/URL)
+    - name: Data Enrichment Sets
+      values:
+        - basic (no extra cost)
+        - meta
+        - social
+        - company
+        - contact
+        - all
+      notes: Enrichment sets may consume additional credits; verify in documentation
+
+optimization:
+  recommendations:
+    - name: Prefer Cached Lookups
+      description: Use live=false (default) to retrieve prefetched results at 1 credit/URL instead of 5 for live recursive crawls; only invoke live scanning when freshness is critical
+      potentialSavings: up to 80% reduction in credit burn for bulk workloads
+
+    - name: Batch URLs Per Request
+      description: Submit up to 10 URLs per Lookup API request to maximize throughput within the 10 req/s rate limit and reduce per-URL overhead
+
+    - name: Use min_age / max_age Filters
+      description: Filter results by data freshness to avoid re-querying recently analyzed domains, preserving credits for genuinely new targets
+
+    - name: Enable denoise Parameter
+      description: Keep denoise=true (default) to suppress low-confidence technology detections and avoid inflating result sets unnecessarily
+
+    - name: Annual Billing
+      description: Switch to annual billing to receive a 17% discount on all plan tiers, reducing effective monthly subscription cost
+
+    - name: Monitor Credit Expiry
+      description: Plan-included credits expire after 60 days; schedule credit-intensive workloads within the billing window to avoid wastage
+
+    - name: Right-size Plan Tier
+      description: Audit monthly credit consumption quarterly; downgrade to Pro or upgrade to Business/Enterprise based on actual usage versus plan allocation
+
+governance:
+  policies:
+    - name: No Data Resale
+      description: Wappalyzer terms prohibit reselling or embedding technographic data into customer-facing products; enterprise licensing required for broader redistribution
+      enforcement: contractual
+
+    - name: API Key Management
+      description: Rotate API keys periodically; store keys in secrets managers (e.g., AWS Secrets Manager, HashiCorp Vault) — never in source code
+      enforcement: operational best practice
+
+    - name: Credit Budget Alerts
+      description: Implement application-level tracking of credits consumed vs. monthly quota; trigger alerts at 70% and 90% thresholds to prevent unexpected quota exhaustion
+
+    - name: Enrichment Set Governance
+      description: Only request additional field sets (company, contact, all) when business logic requires them; restrict enrichment requests to roles with a justified need
+
+reporting:
+  focusAlignment:
+    - dimension: ServiceName
+      value: Wappalyzer Technology Detection API
+    - dimension: ServiceCategory
+      value: Data & Analytics
+    - dimension: ChargeType
+      values:
+        - Usage (credit consumption)
+        - Recurring (subscription)
+    - dimension: PricingUnit
+      value: credit
+    - dimension: Region
+      value: Global (HTTPS API, no region selection)

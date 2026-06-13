@@ -1,0 +1,111 @@
+aid: wappalyzer
+name: Wappalyzer
+description: Technology detection REST API for identifying software, frameworks, CMS platforms, analytics tools, and other technologies used on any website. Provides programmatic access to technographic data via lookup, analyze, crawl, and dataset endpoints using a credit-based model.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/wappalyzer/refs/heads/main/apis.yml
+created: '2026-06-13'
+modified: '2026-06-13'
+specificationVersion: '0.19'
+type: Index
+tags:
+  - Technology Detection
+  - Technographics
+  - Website Analysis
+  - CMS Detection
+  - Framework Detection
+  - Lead Enrichment
+  - Sales Intelligence
+
+apis:
+  - name: Wappalyzer Lookup API
+    description: Real-time or cached technology detection for one to ten website URLs per request. Returns detected technologies with confidence scores, categories, versions, and optional enriched company and contact data.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+    baseURL: https://api.wappalyzer.com
+    tags:
+      - Technology Lookup
+      - Website Detection
+      - Technographics
+    properties:
+      - type: Documentation
+        url: https://www.wappalyzer.com/docs/api/v2/lookup/
+      - type: OpenAPI
+        url: https://www.wappalyzer.com/openapi/v2-public.yaml
+    contact:
+      - FN: Wappalyzer Support
+        url: https://www.wappalyzer.com/contact/
+
+  - name: Wappalyzer Analyze API
+    description: Analyze a single website URL for technology stack detection, returning a detailed breakdown of all identified technologies, frameworks, and platforms.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://www.wappalyzer.com/docs/api/
+    baseURL: https://api.wappalyzer.com
+    tags:
+      - Technology Analysis
+      - Website Analysis
+      - Technographics
+    properties:
+      - type: Documentation
+        url: https://www.wappalyzer.com/docs/api/
+    contact:
+      - FN: Wappalyzer Support
+        url: https://www.wappalyzer.com/contact/
+
+  - name: Wappalyzer Crawl API
+    description: Deep crawl API that indexes multiple pages of a website to build a comprehensive technology profile, supporting asynchronous callbacks for results delivery.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://www.wappalyzer.com/docs/api/
+    baseURL: https://api.wappalyzer.com
+    tags:
+      - Web Crawling
+      - Technology Detection
+      - Async API
+    properties:
+      - type: Documentation
+        url: https://www.wappalyzer.com/docs/api/
+    contact:
+      - FN: Wappalyzer Support
+        url: https://www.wappalyzer.com/contact/
+
+  - name: Wappalyzer Dataset API
+    description: Bulk access to pre-built technographic datasets covering technology installations across millions of websites, suitable for market research and lead list generation.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://www.wappalyzer.com/docs/api/
+    baseURL: https://api.wappalyzer.com
+    tags:
+      - Dataset
+      - Bulk Data
+      - Market Research
+      - Lead Lists
+    properties:
+      - type: Documentation
+        url: https://www.wappalyzer.com/docs/api/
+    contact:
+      - FN: Wappalyzer Support
+        url: https://www.wappalyzer.com/contact/
+
+common:
+  - type: Website
+    url: https://www.wappalyzer.com/
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/
+  - type: GitHubOrg
+    url: https://github.com/wappalyzer
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/wappalyzer
+  - type: X
+    url: https://twitter.com/Wappalyzer
+  - type: Pricing
+    url: https://www.wappalyzer.com/pricing/
+  - type: StatusPage
+    url: https://status.wappalyzer.com/
+  - type: Plans
+    url: plans/wappalyzer-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/wappalyzer-rate-limits.yml
+  - type: FinOps
+    url: finops/wappalyzer-finops.yml
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

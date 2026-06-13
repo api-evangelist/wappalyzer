@@ -1,0 +1,87 @@
+name: Wappalyzer API Rate Limits
+description: Rate limiting policies for the Wappalyzer REST API, applied per API key across all endpoint types.
+version: '0.1'
+url: https://www.wappalyzer.com/docs/api/v2/lookup/
+
+limits:
+  - name: Request Rate Limit
+    description: Maximum number of API requests allowed per second per API key
+    scope: per API key
+    limit: 10
+    unit: requests per second
+    enforcement: server-side rejection with HTTP 429
+    applies_to:
+      - Lookup API
+      - Analyze API
+      - Crawl API
+      - Dataset API
+
+  - name: URLs Per Request
+    description: Maximum number of website URLs that can be submitted in a single Lookup API request
+    scope: per request
+    limit: 10
+    unit: URLs per request
+    enforcement: request validation error
+    applies_to:
+      - Lookup API
+
+  - name: Monthly Credit Quota
+    description: Total API credits available per billing month, determined by plan tier; credits consumed at 1 per standard URL lookup or 5 per live recursive crawl URL
+    scope: per account per month
+    unit: credits
+    tiers:
+      - plan: Free
+        limit: 50
+      - plan: Pro
+        limit: 5000
+      - plan: Business
+        limit: 20000
+      - plan: Enterprise
+        limit: 200000
+    enforcement: HTTP 402 or quota exhaustion error when credits depleted
+    applies_to:
+      - Lookup API
+      - Analyze API
+      - Crawl API
+
+  - name: Request Timeout
+    description: Maximum elapsed time for a synchronous API request before the server terminates it
+    scope: per request
+    limit: 30
+    unit: seconds
+    enforcement: timeout error; use callback_url for async deep crawls
+    applies_to:
+      - Lookup API
+      - Analyze API
+
+  - name: Async Crawl Duration
+    description: Maximum time allowed for deep recursive crawl jobs submitted with a callback_url
+    scope: per crawl job
+    limit: 15
+    unit: minutes
+    enforcement: job timeout; partial results may be delivered via callback
+    applies_to:
+      - Crawl API
+
+creditConsumption:
+  - operation: Standard lookup (prefetched/cached result)
+    creditsConsumed: 1
+    parameterCondition: live=false (default)
+  - operation: Live single-page scan
+    creditsConsumed: 1
+    parameterCondition: live=true, recursive=false
+  - operation: Live recursive multi-page crawl
+    creditsConsumed: 5
+    parameterCondition: live=true, recursive=true
+
+headers:
+  authentication: x-api-key
+  rateLimitStatus: Check response headers for quota remaining information
+
+errorCodes:
+  - code: 429
+    meaning: Too Many Requests — request rate exceeded 10/s
+  - code: 402
+    meaning: Payment Required — monthly credit quota exhausted
+  - code: 401
+    meaning: Unauthorized — missing or invalid API key

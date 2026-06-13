@@ -1,0 +1,163 @@
+name: Wappalyzer Plans and Pricing
+description: API access plans for Wappalyzer technology detection services, structured around monthly credit allocations for lookups, email verifications, and lead list generation.
+version: '0.1'
+url: https://www.wappalyzer.com/pricing/
+
+plans:
+  - name: Free
+    description: Complimentary tier for evaluation and light personal use with limited monthly lookups.
+    url: https://www.wappalyzer.com/pricing/
+    price: 0
+    currency: USD
+    billingCycle: monthly
+    features:
+      - name: Technology Lookups
+        description: Website technology detection requests
+        quota: 50
+        unit: lookups/month
+      - name: Email Verifications
+        description: Email address verification checks
+        quota: 50
+        unit: verifications/month
+      - name: Website Alerts
+        description: Automated alerts when website technologies change
+        quota: 5
+        unit: alerts
+      - name: Lead Lists
+        description: Sample lead list access
+        quota: 1
+        unit: sample lists
+      - name: API Credits
+        description: Credits for API usage
+        quota: 50
+        unit: credits/month
+    limitations:
+      - No CRM enrichment
+      - No API key access
+      - Sample lead lists only
+      - Credits expire after 60 days
+
+  - name: Pro
+    description: Entry-level paid plan for individual users and small teams running targeted technology lookups and lead qualification workflows.
+    url: https://www.wappalyzer.com/pricing/
+    price: 250
+    currency: USD
+    billingCycle: monthly
+    annualDiscount: 17%
+    features:
+      - name: Users
+        description: Team member seats
+        quota: 1
+        unit: users
+      - name: Technology Targets
+        description: Technology filters for lead lists
+        quota: 2
+        unit: targets
+      - name: Technology Lookups
+        description: Website technology detection requests
+        quota: 5000
+        unit: lookups/month
+      - name: Email Verifications
+        description: Email address verification checks
+        quota: 5000
+        unit: verifications/month
+      - name: API Credits
+        description: Credits consumable via REST API
+        quota: 5000
+        unit: credits/month
+    limitations:
+      - Credits expire after 60 days
+      - No CRM enrichment
+      - Limited technology targets
+
+  - name: Business
+    description: Most popular plan for growth teams needing deeper lead list targeting, CRM enrichment, and higher API throughput.
+    url: https://www.wappalyzer.com/pricing/
+    price: 450
+    currency: USD
+    billingCycle: monthly
+    annualDiscount: 17%
+    features:
+      - name: Users
+        description: Team member seats
+        quota: 5
+        unit: users
+      - name: Technology Targets
+        description: Technology filters for lead lists
+        quota: unlimited
+        unit: targets
+      - name: Technology Lookups
+        description: Website technology detection requests
+        quota: 20000
+        unit: lookups/month
+      - name: Email Verifications
+        description: Email address verification checks
+        quota: 20000
+        unit: verifications/month
+      - name: API Credits
+        description: Credits consumable via REST API
+        quota: 20000
+        unit: credits/month
+      - name: CRM Enrichment
+        description: Direct enrichment of CRM records with technographic data
+        quota: included
+        unit: feature
+    limitations:
+      - Credits expire after 60 days
+
+  - name: Enterprise
+    description: High-volume plan for large sales and marketing teams requiring dedicated support, custom terms, and maximum API throughput.
+    url: https://www.wappalyzer.com/pricing/
+    price: 850
+    currency: USD
+    billingCycle: monthly
+    annualDiscount: 17%
+    features:
+      - name: Users
+        description: Team member seats
+        quota: 25
+        unit: users (minimum)
+      - name: Technology Targets
+        description: Technology filters for lead lists
+        quota: unlimited
+        unit: targets
+      - name: Technology Lookups
+        description: Website technology detection requests
+        quota: 200000
+        unit: lookups/month (minimum)
+      - name: Email Verifications
+        description: Email address verification checks
+        quota: 200000
+        unit: verifications/month (minimum)
+      - name: API Credits
+        description: Credits consumable via REST API
+        quota: 200000
+        unit: credits/month (minimum)
+      - name: CRM Enrichment
+        description: Direct enrichment of CRM records with technographic data
+        quota: included
+        unit: feature
+      - name: Dedicated Support
+        description: Named account support with SLA
+        quota: included
+        unit: feature
+      - name: Custom Terms
+        description: Custom licensing and data usage agreements
+        quota: available
+        unit: feature
+    limitations:
+      - Custom pricing above minimum thresholds
+      - Contact sales for exact quote
+
+creditPolicy:
+  unitCost:
+    - operation: Standard lookup (cached)
+      creditsPerUnit: 1
+      unit: URL
+    - operation: Live scan with recursive crawl
+      creditsPerUnit: 5
+      unit: URL
+  expiry:
+    planCredits: 60 days
+    bundleCredits: 365 days
+  resale: prohibited per terms of use
