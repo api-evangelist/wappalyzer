@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api.wappalyzer.com/schemas/verify-result",
+  "title": "VerifyResult",
+  "description": "Email verification and deliverability result from the Wappalyzer /v2/verify endpoint.",
+  "type": "object",
+  "required": [
+    "email", "domain", "reachable", "disposable", "roleAccount",
+    "mxValid", "connection", "inboxFull", "catchAll", "deliverable",
+    "disabled", "syntaxValid"
+  ],
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "The email address that was verified."
+    },
+    "domain": {
+      "type": "string",
+      "description": "Domain portion of the email address."
+    },
+    "reachable": {
+      "type": "string",
+      "enum": ["safe", "risky", "invalid", "unknown"],
+      "description": "Overall reachability classification of the email address."
+    },
+    "disposable": {
+      "type": "boolean",
+      "description": "True if the email address belongs to a disposable email provider."
+    },
+    "roleAccount": {
+      "type": "boolean",
+      "description": "True if the email is a role-based account (e.g. info@, support@)."
+    },
+    "mxValid": {
+      "type": "boolean",
+      "description": "True if the domain has valid MX records."
+    },
+    "connection": {
+      "type": "boolean",
+      "description": "True if a connection to the mail server was successfully established."
+    },
+    "inboxFull": {
+      "type": "boolean",
+      "description": "True if the mailbox is full and cannot receive new messages."
+    },
+    "catchAll": {
+      "type": "boolean",
+      "description": "True if the domain accepts all email addresses regardless of whether they exist."
+    },
+    "deliverable": {
+      "type": "boolean",
+      "description": "True if the email address is likely to successfully receive email."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "True if the email account has been disabled."
+    },
+    "syntaxValid": {
+      "type": "boolean",
+      "description": "True if the email address passes RFC syntax validation."
+    }
+  }
+}

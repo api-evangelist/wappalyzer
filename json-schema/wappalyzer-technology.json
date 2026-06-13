@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api.wappalyzer.com/schemas/technology",
+  "title": "Technology",
+  "description": "A technology detected on a website by Wappalyzer, including its category classification and version information.",
+  "type": "object",
+  "required": ["slug", "name"],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly unique identifier for the technology."
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name of the technology."
+    },
+    "cpe": {
+      "type": "string",
+      "description": "Common Platform Enumeration (CPE) identifier for the technology."
+    },
+    "versions": {
+      "type": "array",
+      "description": "Detected version strings for the technology.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "categories": {
+      "type": "array",
+      "description": "Technology categories this technology belongs to.",
+      "items": {
+        "$ref": "#/definitions/Category"
+      }
+    },
+    "trafficRank": {
+      "type": "integer",
+      "description": "Relative traffic rank of the website."
+    },
+    "confirmedAt": {
+      "type": "integer",
+      "description": "Unix timestamp when the technology detection was confirmed."
+    }
+  },
+  "definitions": {
+    "Category": {
+      "type": "object",
+      "required": ["slug", "name"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Numeric identifier for the category."
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly unique identifier for the category."
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the category."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,149 @@
+vocabulary:
+  name: Wappalyzer API Vocabulary
+  description: Canonical terms and definitions used across the Wappalyzer technology detection API.
+  version: '1.0'
+  updated: '2026-06-13'
+
+terms:
+
+  - term: technology
+    definition: >
+      A software component, framework, CMS, analytics tool, or platform identified
+      as being used on a website. Each technology carries a slug, human-readable
+      name, optional CPE identifier, detected version strings, and one or more
+      category classifications.
+    properties:
+      - slug
+      - name
+      - cpe
+      - versions
+      - categories
+      - trafficRank
+      - confirmedAt
+
+  - term: category
+    definition: >
+      A classification grouping for technologies (e.g. CMS, Ecommerce, Analytics).
+      A technology may belong to multiple categories.
+    properties:
+      - id
+      - slug
+      - name
+
+  - term: lookup
+    definition: >
+      The act of querying Wappalyzer to identify all technologies used on one or
+      more websites. Lookups may return cached results or initiate a live or
+      recursive crawl. Results may arrive synchronously or asynchronously via
+      a callback URL.
+
+  - term: crawl
+    definition: >
+      An asynchronous multi-page scan of a website initiated when recursive=true
+      and no cached result is available. The caller receives a pending marker in
+      the synchronous response and the final result via callback.
+
+  - term: credit
+    definition: >
+      The unit of billing consumed by Wappalyzer API calls. Each technology
+      detection, lead list row, subdomain record, or email verification consumes
+      a defined number of credits. Balance is returned in the
+      wappalyzer-credits-remaining response header.
+
+  - term: lead_list
+    definition: >
+      A filtered, exportable dataset of websites identified as using specific
+      technologies. Created via POST /v2/lists, priced asynchronously, and
+      finalized by spending credits. Available in JSON or CSV format.
+
+  - term: list_status
+    definition: >
+      The lifecycle state of a lead list. One of: Calculating (being priced),
+      Ready (priced and awaiting finalization), Failed (could not be generated),
+      Insufficient (insufficient matching websites), Complete (finalized and
+      downloadable).
+    values:
+      - Calculating
+      - Ready
+      - Failed
+      - Insufficient
+      - Complete
+
+  - term: subdomain
+    definition: >
+      A hostname that is a child of a queried domain and is confirmed to serve
+      web content. Returned by GET /v2/subdomains with pagination support via
+      the moreAfter cursor.
+
+  - term: email_verification
+    definition: >
+      A multi-check assessment of an email address covering syntax validity,
+      MX record existence, SMTP connection, deliverability, disposability, and
+      role-account classification. Returned by GET /v2/verify.
+
+  - term: reachable
+    definition: >
+      The overall deliverability verdict for an email address. One of: safe
+      (deliverable with high confidence), risky (may bounce), invalid (will
+      not deliver), unknown (could not determine).
+    values:
+      - safe
+      - risky
+      - invalid
+      - unknown
+
+  - term: technology_spend
+    definition: >
+      An estimated relative spend on technology stack inferred from the detected
+      technologies. Reported as a qualitative band.
+    values:
+      - Very low
+      - Low
+      - Medium
+      - High
+      - Very high
+
+  - term: traffic_level
+    definition: >
+      A relative classification of a website's monthly traffic volume based on
+      Wappalyzer's data. Reported as a qualitative band when the signals set
+      is requested.
+    values:
+      - Very low
+      - Low
+      - Medium
+      - High
+      - Very high
+
+  - term: sets
+    definition: >
+      Optional named result field sets that can be requested to include
+      additional data in lookup or list responses. The `signals` set adds
+      technologySpend and trafficLevel fields.
+
+  - term: denoise
+    definition: >
+      A query parameter that, when true (the default), excludes low-confidence
+      technology detections from lookup results.
+
+  - term: squash
+    definition: >
+      A query parameter that, when true (the default), merges monthly cached
+      result sets into a single consolidated result.
+
+  - term: callback_url
+    definition: >
+      A publicly reachable HTTPS endpoint provided by the API caller. Wappalyzer
+      POSTs asynchronous results (crawl completions, list ready notifications) to
+      this URL, optionally including a wappalyzer-signature header for verification.
+
+  - term: wappalyzer_signature
+    definition: >
+      An HMAC signature header included in asynchronous callback POST requests
+      from Wappalyzer, allowing the recipient to verify the payload originated
+      from Wappalyzer.
+
+  - term: x_api_key
+    definition: >
+      The API authentication header required for all Wappalyzer API requests.
+      Keys are available from the Wappalyzer dashboard.

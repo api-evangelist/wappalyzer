@@ -1,0 +1,193 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "wappalyzer": "https://www.wappalyzer.com/vocab#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Technology": "wappalyzer:Technology",
+    "Category": "wappalyzer:Category",
+    "LookupResult": "wappalyzer:LookupResult",
+    "LeadList": "wappalyzer:LeadList",
+    "SubdomainsResult": "wappalyzer:SubdomainsResult",
+    "VerifyResult": "wappalyzer:VerifyResult",
+    "CreditsBalance": "wappalyzer:CreditsBalance",
+
+    "slug": {
+      "@id": "wappalyzer:slug",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "cpe": {
+      "@id": "wappalyzer:cpe",
+      "@type": "xsd:string"
+    },
+    "versions": {
+      "@id": "wappalyzer:versions",
+      "@container": "@list"
+    },
+    "categories": {
+      "@id": "wappalyzer:categories",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "trafficRank": {
+      "@id": "wappalyzer:trafficRank",
+      "@type": "xsd:integer"
+    },
+    "confirmedAt": {
+      "@id": "wappalyzer:confirmedAt",
+      "@type": "xsd:integer"
+    },
+    "url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "technologies": {
+      "@id": "wappalyzer:technologies",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "technologySpend": {
+      "@id": "wappalyzer:technologySpend",
+      "@type": "xsd:string"
+    },
+    "trafficLevel": {
+      "@id": "wappalyzer:trafficLevel",
+      "@type": "xsd:string"
+    },
+    "crawl": {
+      "@id": "wappalyzer:crawl",
+      "@type": "xsd:boolean"
+    },
+    "errors": {
+      "@id": "wappalyzer:errors",
+      "@container": "@list"
+    },
+    "credits": {
+      "@id": "wappalyzer:credits",
+      "@type": "xsd:integer"
+    },
+    "domain": {
+      "@id": "schema:domainIncludes",
+      "@type": "xsd:string"
+    },
+    "subdomains": {
+      "@id": "wappalyzer:subdomains",
+      "@type": "@id"
+    },
+    "moreAfter": {
+      "@id": "wappalyzer:moreAfter",
+      "@type": "xsd:string"
+    },
+    "createdAt": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:integer"
+    },
+    "updatedAt": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:integer"
+    },
+    "email": {
+      "@id": "schema:email",
+      "@type": "xsd:string"
+    },
+    "reachable": {
+      "@id": "wappalyzer:reachable",
+      "@type": "xsd:string"
+    },
+    "disposable": {
+      "@id": "wappalyzer:disposable",
+      "@type": "xsd:boolean"
+    },
+    "roleAccount": {
+      "@id": "wappalyzer:roleAccount",
+      "@type": "xsd:boolean"
+    },
+    "mxValid": {
+      "@id": "wappalyzer:mxValid",
+      "@type": "xsd:boolean"
+    },
+    "connection": {
+      "@id": "wappalyzer:connection",
+      "@type": "xsd:boolean"
+    },
+    "inboxFull": {
+      "@id": "wappalyzer:inboxFull",
+      "@type": "xsd:boolean"
+    },
+    "catchAll": {
+      "@id": "wappalyzer:catchAll",
+      "@type": "xsd:boolean"
+    },
+    "deliverable": {
+      "@id": "wappalyzer:deliverable",
+      "@type": "xsd:boolean"
+    },
+    "disabled": {
+      "@id": "wappalyzer:disabled",
+      "@type": "xsd:boolean"
+    },
+    "syntaxValid": {
+      "@id": "wappalyzer:syntaxValid",
+      "@type": "xsd:boolean"
+    },
+    "id": {
+      "@id": "@id"
+    },
+    "status": {
+      "@id": "wappalyzer:status",
+      "@type": "xsd:string"
+    },
+    "totalCredits": {
+      "@id": "wappalyzer:totalCredits",
+      "@type": "xsd:integer"
+    },
+    "rows": {
+      "@id": "wappalyzer:rows"
+    },
+    "keywords": {
+      "@id": "wappalyzer:keywords",
+      "@container": "@list"
+    },
+    "languages": {
+      "@id": "wappalyzer:languages",
+      "@container": "@set"
+    },
+    "countries": {
+      "@id": "wappalyzer:countries",
+      "@container": "@set"
+    },
+    "industries": {
+      "@id": "wappalyzer:industries",
+      "@container": "@set"
+    },
+    "companySizes": {
+      "@id": "wappalyzer:companySizes",
+      "@container": "@list"
+    },
+    "tlds": {
+      "@id": "wappalyzer:tlds",
+      "@container": "@set"
+    },
+    "callbackUrl": {
+      "@id": "wappalyzer:callbackUrl",
+      "@type": "@id"
+    },
+    "format": {
+      "@id": "wappalyzer:format",
+      "@type": "xsd:string"
+    },
+    "sampleUrl": {
+      "@id": "wappalyzer:sampleUrl",
+      "@type": "@id"
+    },
+    "spendCredits": {
+      "@id": "wappalyzer:spendCredits",
+      "@type": "xsd:integer"
+    }
+  }
+}

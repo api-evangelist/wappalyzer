@@ -1,0 +1,14 @@
+{
+  "email": "user@example.com",
+  "domain": "example.com",
+  "reachable": "safe",
+  "disposable": false,
+  "roleAccount": false,
+  "mxValid": true,
+  "connection": true,
+  "inboxFull": false,
+  "catchAll": false,
+  "deliverable": true,
+  "disabled": false,
+  "syntaxValid": true
+}

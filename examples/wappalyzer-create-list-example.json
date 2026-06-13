@@ -1,0 +1,33 @@
+{
+  "request": {
+    "technologies": [
+      {
+        "slug": "wordpress",
+        "operator": "=",
+        "version": null
+      }
+    ],
+    "countries": ["US", "GB", "CA"],
+    "companySizes": [10, 50, 200],
+    "maxAge": 3,
+    "format": "csv",
+    "sets": ["signals"],
+    "callbackUrl": "https://your-server.example.com/webhooks/wappalyzer"
+  },
+  "response": {
+    "id": "lst_abc123def456",
+    "status": "Calculating"
+  },
+  "callback_payload": {
+    "id": "lst_abc123def456",
+    "status": "Ready",
+    "rows": {
+      "1": 4250
+    },
+    "setRows": {
+      "signals": 3980
+    },
+    "totalCredits": 4250,
+    "sampleUrl": "https://cdn.wappalyzer.com/lists/lst_abc123def456/sample.csv"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api.wappalyzer.com/schemas/lookup-response",
+  "title": "LookupResponse",
+  "description": "Array of results returned by the Wappalyzer /v2/lookup endpoint. Each item is either a completed result, a pending crawl marker, or an error.",
+  "type": "array",
+  "items": {
+    "oneOf": [
+      { "$ref": "#/definitions/LookupCompleted" },
+      { "$ref": "#/definitions/LookupPending" },
+      { "$ref": "#/definitions/LookupError" }
+    ]
+  },
+  "definitions": {
+    "Category": {
+      "type": "object",
+      "required": ["slug", "name"],
+      "properties": {
+        "id": { "type": "integer" },
+        "slug": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    },
+    "Technology": {
+      "type": "object",
+      "required": ["slug", "name"],
+      "properties": {
+        "slug": { "type": "string" },
+        "name": { "type": "string" },
+        "cpe": { "type": "string" },
+        "versions": { "type": "array", "items": { "type": "string" } },
+        "categories": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Category" }
+        },
+        "trafficRank": { "type": "integer" },
+        "confirmedAt": { "type": "integer" }
+      }
+    },
+    "LookupCompleted": {
+      "type": "object",
+      "required": ["url", "technologies"],
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "technologies": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Technology" }
+        },
+        "technologySpend": {
+          "type": "string",
+          "enum": ["Very low", "Low", "Medium", "High", "Very high"],
+          "description": "Estimated technology spend derived from detected technologies."
+        },
+        "trafficLevel": {
+          "type": "string",
+          "enum": ["Very low", "Low", "Medium", "High", "Very high"],
+          "description": "Relative monthly traffic level."
+        }
+      }
+    },
+    "LookupPending": {
+      "type": "object",
+      "required": ["url", "crawl"],
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "technologies": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Technology" }
+        },
+        "crawl": { "type": "boolean" }
+      }
+    },
+    "LookupError": {
+      "type": "object",
+      "required": ["url", "errors"],
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

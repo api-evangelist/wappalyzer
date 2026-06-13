@@ -1,0 +1,906 @@
+openapi: 3.0.3
+info:
+  title: Wappalyzer Public API
+  version: v2
+  description: |
+    OpenAPI 3.0 contract for Wappalyzer's documented public REST endpoints.
+    Covers credit balance, technology lookup, lead lists, subdomain discovery,
+    and email verification.
+  license:
+    name: Proprietary
+    url: https://www.wappalyzer.com/terms/
+  contact:
+    name: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+servers:
+  - url: https://api.wappalyzer.com/v2
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Basics
+    description: Shared authentication, billing, and response conventions.
+  - name: Lookup
+    description: Website technology lookup and asynchronous crawl callbacks.
+  - name: Lists
+    description: Lead list creation, pricing, and download lifecycle.
+  - name: Subdomains
+    description: Dataset-backed website-serving subdomain discovery.
+  - name: Verify
+    description: Email verification and deliverability checks.
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+  headers:
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
+      schema:
+        type: integer
+  responses:
+    BadRequest:
+      description: The request payload or query string was invalid.
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    TooManyRequests:
+      description: Rate limit exceeded.
+  parameters:
+    Urls:
+      name: urls
+      in: query
+      required: true
+      description: Between one and ten website URLs, comma separated. Multiple URLs are not supported with `recursive=false`.
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+          format: uri
+      style: form
+      explode: false
+    Live:
+      name: live
+      in: query
+      description: Scan websites in real time instead of relying on cached results when needed.
+      schema:
+        type: boolean
+        default: false
+    Recursive:
+      name: recursive
+      in: query
+      description: Follow internal links for increased coverage. Asynchronous when true and a crawl is required.
+      schema:
+        type: boolean
+        default: true
+    CallbackUrl:
+      name: callback_url
+      in: query
+      description: Public callback URL that receives asynchronous lookup results.
+      schema:
+        type: string
+        format: uri
+    DebugEmail:
+      name: debug_email
+      in: query
+      description: Debug-only email address that receives callback troubleshooting information.
+      schema:
+        type: string
+        format: email
+    Sets:
+      name: sets
+      in: query
+      description: Comma-separated list of additional result field sets to include. Use `signals` to request `technologySpend` and `trafficLevel`.
+      schema:
+        type: array
+        items:
+          type: string
+      style: form
+      explode: false
+    Denoise:
+      name: denoise
+      in: query
+      description: Exclude low-confidence detections.
+      schema:
+        type: boolean
+        default: true
+    MinAge:
+      name: min_age
+      in: query
+      description: Return results verified at least this many months ago.
+      schema:
+        type: integer
+        minimum: 0
+    MaxAge:
+      name: max_age
+      in: query
+      description: Return results verified within the last `max_age` months.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 12
+        default: 2
+    Squash:
+      name: squash
+      in: query
+      description: Merge monthly results into a single result set.
+      schema:
+        type: boolean
+        default: true
+    Domains:
+      name: domains
+      in: query
+      required: true
+      description: Between one and ten domain names, comma separated.
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+      style: form
+      explode: false
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of subdomains to return. Must be a multiple of 10.
+      schema:
+        type: integer
+        minimum: 10
+    After:
+      name: after
+      in: query
+      description: Resume pagination after the previous `moreAfter` value.
+      schema:
+        type: string
+    Email:
+      name: email
+      in: query
+      required: true
+      description: Email address to verify.
+      schema:
+        type: string
+        format: email
+    ListId:
+      name: id
+      in: path
+      required: true
+      description: Unique list identifier.
+      schema:
+        type: string
+        pattern: '^lst_'
+  schemas:
+    Category:
+      type: object
+      required:
+        - slug
+        - name
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+    Technology:
+      type: object
+      required:
+        - slug
+        - name
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        cpe:
+          type: string
+        versions:
+          type: array
+          items:
+            type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        trafficRank:
+          type: integer
+        confirmedAt:
+          type: integer
+    LookupCompleted:
+      type: object
+      required:
+        - url
+        - technologies
+      properties:
+        url:
+          type: string
+          format: uri
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Technology'
+        technologySpend:
+          type: string
+          description: Estimated technology spend derived from the detected technologies.
+          enum:
+            - Very low
+            - Low
+            - Medium
+            - High
+            - Very high
+        trafficLevel:
+          type: string
+          description: Relative monthly traffic level when Wappalyzer has current hostname traffic data.
+          enum:
+            - Very low
+            - Low
+            - Medium
+            - High
+            - Very high
+    LookupPending:
+      type: object
+      required:
+        - url
+        - crawl
+      properties:
+        url:
+          type: string
+          format: uri
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Technology'
+        crawl:
+          type: boolean
+    LookupError:
+      type: object
+      required:
+        - url
+        - errors
+      properties:
+        url:
+          type: string
+          format: uri
+        errors:
+          type: array
+          items:
+            type: string
+    CreditsBalance:
+      type: object
+      required:
+        - credits
+      properties:
+        credits:
+          type: integer
+    SubdomainRecord:
+      type: object
+      required:
+        - createdAt
+        - updatedAt
+      properties:
+        createdAt:
+          type: integer
+        updatedAt:
+          type: integer
+    SubdomainsResult:
+      type: object
+      required:
+        - domain
+        - subdomains
+      properties:
+        domain:
+          type: string
+        subdomains:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubdomainRecord'
+        moreAfter:
+          type: string
+    VerifyResult:
+      type: object
+      required:
+        - email
+        - domain
+        - reachable
+        - disposable
+        - roleAccount
+        - mxValid
+        - connection
+        - inboxFull
+        - catchAll
+        - deliverable
+        - disabled
+        - syntaxValid
+      properties:
+        email:
+          type: string
+          format: email
+        domain:
+          type: string
+        reachable:
+          type: string
+          enum:
+            - safe
+            - risky
+            - invalid
+            - unknown
+        disposable:
+          type: boolean
+        roleAccount:
+          type: boolean
+        mxValid:
+          type: boolean
+        connection:
+          type: boolean
+        inboxFull:
+          type: boolean
+        catchAll:
+          type: boolean
+        deliverable:
+          type: boolean
+        disabled:
+          type: boolean
+        syntaxValid:
+          type: boolean
+    ListTechnology:
+      type: object
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        operator:
+          type: string
+          pattern: '^[<>]?=$'
+        version:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    ListStatus:
+      type: string
+      enum:
+        - Calculating
+        - Ready
+        - Failed
+        - Insufficient
+        - Complete
+    CreateListRequest:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        technologies:
+          type: array
+          items:
+            type: object
+            required:
+              - slug
+            properties:
+              slug:
+                type: string
+              operator:
+                type: string
+                pattern: '^[<>]?=$'
+              version:
+                type: string
+        keywords:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        countries:
+          type: array
+          items:
+            type: string
+        industries:
+          type: array
+          items:
+            type: string
+        companySizes:
+          type: array
+          items:
+            type: integer
+        tlds:
+          type: array
+          items:
+            type: string
+        matchCountryLanguage:
+          type: boolean
+        matchTechnologies:
+          type: string
+          enum:
+            - or
+            - and
+            - not
+        subset:
+          type: integer
+        subsetSlice:
+          type: integer
+          minimum: 0
+          maximum: 4
+        minAge:
+          type: integer
+          minimum: 0
+          maximum: 11
+        maxAge:
+          type: integer
+          minimum: 1
+          maximum: 12
+        fromDate:
+          type: integer
+        requiredSets:
+          type: array
+          items:
+            type: string
+        excludeNoTraffic:
+          type: boolean
+        excludeMultilingual:
+          type: boolean
+        sets:
+          type: array
+          description: Result field sets to include in the exported rows.
+          items:
+            type: string
+        callbackUrl:
+          type: string
+          format: uri
+        format:
+          type: string
+          enum:
+            - json
+            - csv
+        baseListId:
+          type: string
+          pattern: '^lst_'
+        excludeListId:
+          type: string
+          pattern: '^lst_'
+        rootPath:
+          type: boolean
+        subdomains:
+          type: string
+          enum:
+            - include
+            - exclude
+            - merge
+    ListSummary:
+      type: object
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: string
+          pattern: '^lst_'
+        createdAt:
+          type: integer
+        status:
+          $ref: '#/components/schemas/ListStatus'
+        totalCredits:
+          type: integer
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListTechnology'
+        keywords:
+          type: array
+          items:
+            type: string
+        rows:
+          type: integer
+    ListDetail:
+      type: object
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: string
+          pattern: '^lst_'
+        createdAt:
+          type: integer
+        status:
+          $ref: '#/components/schemas/ListStatus'
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListTechnology'
+        keywords:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        countries:
+          type: array
+          items:
+            type: string
+        industries:
+          type: array
+          items:
+            type: string
+        companySizes:
+          type: array
+          items:
+            type: integer
+        tlds:
+          type: array
+          items:
+            type: string
+        matchCountryLanguage:
+          type: boolean
+        matchTechnologies:
+          type: string
+          enum:
+            - or
+            - and
+            - not
+        subset:
+          type: integer
+        subsetSlice:
+          type: integer
+        minAge:
+          type: integer
+        maxAge:
+          type: integer
+        fromDate:
+          type: integer
+          nullable: true
+        requiredSets:
+          type: array
+          items:
+            type: string
+        excludeNoTraffic:
+          type: boolean
+        excludeMultilingual:
+          type: boolean
+        sets:
+          type: array
+          items:
+            type: string
+        callbackUrl:
+          type: string
+          format: uri
+          nullable: true
+        totalCredits:
+          type: integer
+        url:
+          type: string
+          format: uri
+          nullable: true
+        sampleUrl:
+          type: string
+          format: uri
+        rows:
+          type: object
+          additionalProperties:
+            type: integer
+        setRows:
+          type: object
+          additionalProperties:
+            type: integer
+    CreateListAccepted:
+      type: object
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: string
+          pattern: '^lst_'
+        status:
+          type: string
+          enum:
+            - Calculating
+    ListReadyCallback:
+      type: object
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: string
+          pattern: '^lst_'
+        status:
+          type: string
+          enum:
+            - Ready
+        rows:
+          type: object
+          additionalProperties:
+            type: integer
+        setRows:
+          type: object
+          additionalProperties:
+            type: integer
+        totalCredits:
+          type: integer
+        sampleUrl:
+          type: string
+          format: uri
+    FinalizeListRequest:
+      type: object
+      required:
+        - spendCredits
+      properties:
+        spendCredits:
+          type: integer
+    FinalizeListResponse:
+      type: object
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: string
+          pattern: '^lst_'
+        status:
+          type: string
+          enum:
+            - Complete
+        url:
+          type: string
+          format: uri
+    EmptyObject:
+      type: object
+paths:
+  /credits/balance:
+    get:
+      tags:
+        - Basics
+      operationId: getCreditBalance
+      summary: Get current credit balance
+      responses:
+        '200':
+          description: Credit balance returned successfully.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditsBalance'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /lookup:
+    get:
+      tags:
+        - Lookup
+      operationId: lookupWebsites
+      summary: Look up technologies and related website intelligence
+      description: |
+        Looks up one or more websites. The response can complete synchronously
+        or return pending crawl markers when an asynchronous crawl is required.
+      parameters:
+        - $ref: '#/components/parameters/Urls'
+        - $ref: '#/components/parameters/Live'
+        - $ref: '#/components/parameters/Recursive'
+        - $ref: '#/components/parameters/CallbackUrl'
+        - $ref: '#/components/parameters/DebugEmail'
+        - $ref: '#/components/parameters/Sets'
+        - $ref: '#/components/parameters/Denoise'
+        - $ref: '#/components/parameters/MinAge'
+        - $ref: '#/components/parameters/MaxAge'
+        - $ref: '#/components/parameters/Squash'
+      responses:
+        '200':
+          description: Lookup completed or crawl accepted.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/LookupCompleted'
+                    - $ref: '#/components/schemas/LookupPending'
+                    - $ref: '#/components/schemas/LookupError'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /subdomains:
+    get:
+      tags:
+        - Subdomains
+      operationId: lookupSubdomains
+      summary: Discover website-serving subdomains
+      parameters:
+        - $ref: '#/components/parameters/Domains'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/After'
+      responses:
+        '200':
+          description: Subdomain discovery results returned successfully.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubdomainsResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /verify:
+    get:
+      tags:
+        - Verify
+      operationId: verifyEmail
+      summary: Verify an email address
+      parameters:
+        - $ref: '#/components/parameters/Email'
+      responses:
+        '200':
+          description: Verification result returned successfully.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /lists:
+    get:
+      tags:
+        - Lists
+      operationId: listLeadLists
+      summary: List created lead lists
+      responses:
+        '200':
+          description: Lead lists returned successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListSummary'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+        - Lists
+      operationId: createLeadList
+      summary: Create a lead list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateListRequest'
+      responses:
+        '200':
+          description: Lead list accepted for pricing and generation.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateListAccepted'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /lists/{id}:
+    get:
+      tags:
+        - Lists
+      operationId: getLeadList
+      summary: Fetch a lead list
+      parameters:
+        - $ref: '#/components/parameters/ListId'
+      responses:
+        '200':
+          description: Lead list returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+        - Lists
+      operationId: finalizeLeadList
+      summary: Spend credits and finalize a ready lead list
+      parameters:
+        - $ref: '#/components/parameters/ListId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinalizeListRequest'
+      responses:
+        '200':
+          description: Lead list finalized successfully.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinalizeListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+        - Lists
+      operationId: deleteLeadList
+      summary: Delete a lead list
+      parameters:
+        - $ref: '#/components/parameters/ListId'
+      responses:
+        '200':
+          description: Lead list deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'

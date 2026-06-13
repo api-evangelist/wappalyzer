@@ -1,0 +1,58 @@
+[
+  {
+    "url": "https://www.example.com",
+    "technologies": [
+      {
+        "slug": "wordpress",
+        "name": "WordPress",
+        "cpe": "cpe:2.3:a:wordpress:wordpress:*:*:*:*:*:*:*:*",
+        "versions": ["6.4.2"],
+        "categories": [
+          {
+            "id": 1,
+            "slug": "cms",
+            "name": "CMS"
+          },
+          {
+            "id": 11,
+            "slug": "blog",
+            "name": "Blog"
+          }
+        ],
+        "trafficRank": 12500,
+        "confirmedAt": 1700000000
+      },
+      {
+        "slug": "php",
+        "name": "PHP",
+        "cpe": "cpe:2.3:a:php:php:*:*:*:*:*:*:*:*",
+        "versions": ["8.1"],
+        "categories": [
+          {
+            "id": 12,
+            "slug": "programming-languages",
+            "name": "Programming languages"
+          }
+        ],
+        "trafficRank": 12500,
+        "confirmedAt": 1700000000
+      },
+      {
+        "slug": "woocommerce",
+        "name": "WooCommerce",
+        "versions": ["8.0.0"],
+        "categories": [
+          {
+            "id": 6,
+            "slug": "ecommerce",
+            "name": "Ecommerce"
+          }
+        ],
+        "trafficRank": 12500,
+        "confirmedAt": 1700000000
+      }
+    ],
+    "technologySpend": "Medium",
+    "trafficLevel": "Low"
+  }
+]
