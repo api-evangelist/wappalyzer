@@ -1,7 +1,7 @@
 aid: wappalyzer
 name: Wappalyzer
 description: Technology detection REST API for identifying software, frameworks, CMS platforms, analytics tools, and other technologies used on any website. Provides programmatic access to technographic data via lookup, analyze, crawl, and dataset endpoints using a credit-based model.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/wappalyzer/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -19,7 +19,7 @@ tags:
 apis:
   - name: Wappalyzer Lookup API
     description: Real-time or cached technology detection for one to ten website URLs per request. Returns detected technologies with confidence scores, categories, versions, and optional enriched company and contact data.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
     baseURL: https://api.wappalyzer.com
     tags:
@@ -37,7 +37,7 @@ apis:
 
   - name: Wappalyzer Analyze API
     description: Analyze a single website URL for technology stack detection, returning a detailed breakdown of all identified technologies, frameworks, and platforms.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://www.wappalyzer.com/docs/api/
     baseURL: https://api.wappalyzer.com
     tags:
@@ -53,7 +53,7 @@ apis:
 
   - name: Wappalyzer Crawl API
     description: Deep crawl API that indexes multiple pages of a website to build a comprehensive technology profile, supporting asynchronous callbacks for results delivery.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://www.wappalyzer.com/docs/api/
     baseURL: https://api.wappalyzer.com
     tags:
@@ -69,7 +69,7 @@ apis:
 
   - name: Wappalyzer Dataset API
     description: Bulk access to pre-built technographic datasets covering technology installations across millions of websites, suitable for market research and lead list generation.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://www.wappalyzer.com/docs/api/
     baseURL: https://api.wappalyzer.com
     tags:
