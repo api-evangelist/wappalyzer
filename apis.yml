@@ -85,6 +85,10 @@ apis:
         url: https://www.wappalyzer.com/contact/
 
 common:
+  - type: DomainSecurity
+    url: security/wappalyzer-domain-security.yml
+  - type: Authentication
+    url: authentication/wappalyzer-authentication.yml
   - type: Website
     url: https://www.wappalyzer.com/
   - type: Documentation
