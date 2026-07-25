@@ -1,0 +1,79 @@
+openapi: 3.0.3
+info:
+  title: Wappalyzer Public Basics API
+  version: v2
+  description: 'OpenAPI 3.0 contract for Wappalyzer''s documented public REST endpoints.
+
+    Covers credit balance, technology lookup, lead lists, subdomain discovery,
+
+    and email verification.
+
+    '
+  license:
+    name: Proprietary
+    url: https://www.wappalyzer.com/terms/
+  contact:
+    name: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+servers:
+- url: https://api.wappalyzer.com/v2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Basics
+  description: Shared authentication, billing, and response conventions.
+paths:
+  /credits/balance:
+    get:
+      tags:
+      - Basics
+      operationId: getCreditBalance
+      summary: Get current credit balance
+      responses:
+        '200':
+          description: Credit balance returned successfully.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditsBalance'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    CreditsBalance:
+      type: object
+      required:
+      - credits
+      properties:
+        credits:
+          type: integer
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded.
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    BadRequest:
+      description: The request payload or query string was invalid.
+  headers:
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
+      schema:
+        type: integer
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key

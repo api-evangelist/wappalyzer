@@ -1,0 +1,476 @@
+openapi: 3.0.3
+info:
+  title: Wappalyzer Public Basics Lists API
+  version: v2
+  description: 'OpenAPI 3.0 contract for Wappalyzer''s documented public REST endpoints.
+
+    Covers credit balance, technology lookup, lead lists, subdomain discovery,
+
+    and email verification.
+
+    '
+  license:
+    name: Proprietary
+    url: https://www.wappalyzer.com/terms/
+  contact:
+    name: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+servers:
+- url: https://api.wappalyzer.com/v2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Lists
+  description: Lead list creation, pricing, and download lifecycle.
+paths:
+  /lists:
+    get:
+      tags:
+      - Lists
+      operationId: listLeadLists
+      summary: List created lead lists
+      responses:
+        '200':
+          description: Lead lists returned successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListSummary'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+      - Lists
+      operationId: createLeadList
+      summary: Create a lead list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateListRequest'
+      responses:
+        '200':
+          description: Lead list accepted for pricing and generation.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateListAccepted'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /lists/{id}:
+    get:
+      tags:
+      - Lists
+      operationId: getLeadList
+      summary: Fetch a lead list
+      parameters:
+      - $ref: '#/components/parameters/ListId'
+      responses:
+        '200':
+          description: Lead list returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      tags:
+      - Lists
+      operationId: finalizeLeadList
+      summary: Spend credits and finalize a ready lead list
+      parameters:
+      - $ref: '#/components/parameters/ListId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinalizeListRequest'
+      responses:
+        '200':
+          description: Lead list finalized successfully.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinalizeListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      tags:
+      - Lists
+      operationId: deleteLeadList
+      summary: Delete a lead list
+      parameters:
+      - $ref: '#/components/parameters/ListId'
+      responses:
+        '200':
+          description: Lead list deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    CreateListRequest:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        technologies:
+          type: array
+          items:
+            type: object
+            required:
+            - slug
+            properties:
+              slug:
+                type: string
+              operator:
+                type: string
+                pattern: ^[<>]?=$
+              version:
+                type: string
+        keywords:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        countries:
+          type: array
+          items:
+            type: string
+        industries:
+          type: array
+          items:
+            type: string
+        companySizes:
+          type: array
+          items:
+            type: integer
+        tlds:
+          type: array
+          items:
+            type: string
+        matchCountryLanguage:
+          type: boolean
+        matchTechnologies:
+          type: string
+          enum:
+          - or
+          - and
+          - not
+        subset:
+          type: integer
+        subsetSlice:
+          type: integer
+          minimum: 0
+          maximum: 4
+        minAge:
+          type: integer
+          minimum: 0
+          maximum: 11
+        maxAge:
+          type: integer
+          minimum: 1
+          maximum: 12
+        fromDate:
+          type: integer
+        requiredSets:
+          type: array
+          items:
+            type: string
+        excludeNoTraffic:
+          type: boolean
+        excludeMultilingual:
+          type: boolean
+        sets:
+          type: array
+          description: Result field sets to include in the exported rows.
+          items:
+            type: string
+        callbackUrl:
+          type: string
+          format: uri
+        format:
+          type: string
+          enum:
+          - json
+          - csv
+        baseListId:
+          type: string
+          pattern: ^lst_
+        excludeListId:
+          type: string
+          pattern: ^lst_
+        rootPath:
+          type: boolean
+        subdomains:
+          type: string
+          enum:
+          - include
+          - exclude
+          - merge
+    ListSummary:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        createdAt:
+          type: integer
+        status:
+          $ref: '#/components/schemas/ListStatus'
+        totalCredits:
+          type: integer
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListTechnology'
+        keywords:
+          type: array
+          items:
+            type: string
+        rows:
+          type: integer
+    FinalizeListResponse:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        status:
+          type: string
+          enum:
+          - Complete
+        url:
+          type: string
+          format: uri
+    ListStatus:
+      type: string
+      enum:
+      - Calculating
+      - Ready
+      - Failed
+      - Insufficient
+      - Complete
+    EmptyObject:
+      type: object
+    FinalizeListRequest:
+      type: object
+      required:
+      - spendCredits
+      properties:
+        spendCredits:
+          type: integer
+    Category:
+      type: object
+      required:
+      - slug
+      - name
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+    ListDetail:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        createdAt:
+          type: integer
+        status:
+          $ref: '#/components/schemas/ListStatus'
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListTechnology'
+        keywords:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        countries:
+          type: array
+          items:
+            type: string
+        industries:
+          type: array
+          items:
+            type: string
+        companySizes:
+          type: array
+          items:
+            type: integer
+        tlds:
+          type: array
+          items:
+            type: string
+        matchCountryLanguage:
+          type: boolean
+        matchTechnologies:
+          type: string
+          enum:
+          - or
+          - and
+          - not
+        subset:
+          type: integer
+        subsetSlice:
+          type: integer
+        minAge:
+          type: integer
+        maxAge:
+          type: integer
+        fromDate:
+          type: integer
+          nullable: true
+        requiredSets:
+          type: array
+          items:
+            type: string
+        excludeNoTraffic:
+          type: boolean
+        excludeMultilingual:
+          type: boolean
+        sets:
+          type: array
+          items:
+            type: string
+        callbackUrl:
+          type: string
+          format: uri
+          nullable: true
+        totalCredits:
+          type: integer
+        url:
+          type: string
+          format: uri
+          nullable: true
+        sampleUrl:
+          type: string
+          format: uri
+        rows:
+          type: object
+          additionalProperties:
+            type: integer
+        setRows:
+          type: object
+          additionalProperties:
+            type: integer
+    CreateListAccepted:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        status:
+          type: string
+          enum:
+          - Calculating
+    ListTechnology:
+      type: object
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        operator:
+          type: string
+          pattern: ^[<>]?=$
+        version:
+          type: string
+          nullable: true
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+  responses:
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    TooManyRequests:
+      description: Rate limit exceeded.
+    BadRequest:
+      description: The request payload or query string was invalid.
+  headers:
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
+      schema:
+        type: integer
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
+  parameters:
+    ListId:
+      name: id
+      in: path
+      required: true
+      description: Unique list identifier.
+      schema:
+        type: string
+        pattern: ^lst_
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key

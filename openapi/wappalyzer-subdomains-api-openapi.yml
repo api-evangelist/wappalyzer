@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: Wappalyzer Public Basics Subdomains API
+  version: v2
+  description: 'OpenAPI 3.0 contract for Wappalyzer''s documented public REST endpoints.
+
+    Covers credit balance, technology lookup, lead lists, subdomain discovery,
+
+    and email verification.
+
+    '
+  license:
+    name: Proprietary
+    url: https://www.wappalyzer.com/terms/
+  contact:
+    name: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+servers:
+- url: https://api.wappalyzer.com/v2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Subdomains
+  description: Dataset-backed website-serving subdomain discovery.
+paths:
+  /subdomains:
+    get:
+      tags:
+      - Subdomains
+      operationId: lookupSubdomains
+      summary: Discover website-serving subdomains
+      parameters:
+      - $ref: '#/components/parameters/Domains'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/After'
+      responses:
+        '200':
+          description: Subdomain discovery results returned successfully.
+          headers:
+            wappalyzer-credits-spent:
+              $ref: '#/components/headers/CreditsSpent'
+            wappalyzer-credits-remaining:
+              $ref: '#/components/headers/CreditsRemaining'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubdomainsResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded.
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    BadRequest:
+      description: The request payload or query string was invalid.
+  schemas:
+    SubdomainsResult:
+      type: object
+      required:
+      - domain
+      - subdomains
+      properties:
+        domain:
+          type: string
+        subdomains:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/SubdomainRecord'
+        moreAfter:
+          type: string
+    SubdomainRecord:
+      type: object
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: integer
+        updatedAt:
+          type: integer
+  headers:
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
+      schema:
+        type: integer
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of subdomains to return. Must be a multiple of 10.
+      schema:
+        type: integer
+        minimum: 10
+    After:
+      name: after
+      in: query
+      description: Resume pagination after the previous `moreAfter` value.
+      schema:
+        type: string
+    Domains:
+      name: domains
+      in: query
+      required: true
+      description: Between one and ten domain names, comma separated.
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+      style: form
+      explode: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
