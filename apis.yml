@@ -1,7 +1,20 @@
 aid: wappalyzer
 name: Wappalyzer
 description: Technology detection REST API for identifying software, frameworks, CMS platforms, analytics tools, and other technologies used on any website. Provides programmatic access to technographic data via lookup, analyze, crawl, and dataset endpoints using a credit-based model.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/wappalyzer.png
 url: https://raw.githubusercontent.com/api-evangelist/wappalyzer/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -17,73 +30,118 @@ tags:
   - Sales Intelligence
 
 apis:
-  - name: Wappalyzer Lookup API
-    description: Real-time or cached technology detection for one to ten website URLs per request. Returns detected technologies with confidence scores, categories, versions, and optional enriched company and contact data.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
-    baseURL: https://api.wappalyzer.com
-    tags:
-      - Technology Lookup
-      - Website Detection
-      - Technographics
-    properties:
-      - type: Documentation
-        url: https://www.wappalyzer.com/docs/api/v2/lookup/
-      - type: OpenAPI
-        url: https://www.wappalyzer.com/openapi/v2-public.yaml
-    contact:
-      - FN: Wappalyzer Support
-        url: https://www.wappalyzer.com/contact/
-
-  - name: Wappalyzer Analyze API
-    description: Analyze a single website URL for technology stack detection, returning a detailed breakdown of all identified technologies, frameworks, and platforms.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://www.wappalyzer.com/docs/api/
-    baseURL: https://api.wappalyzer.com
-    tags:
-      - Technology Analysis
-      - Website Analysis
-      - Technographics
-    properties:
-      - type: Documentation
-        url: https://www.wappalyzer.com/docs/api/
-    contact:
-      - FN: Wappalyzer Support
-        url: https://www.wappalyzer.com/contact/
-
-  - name: Wappalyzer Crawl API
-    description: Deep crawl API that indexes multiple pages of a website to build a comprehensive technology profile, supporting asynchronous callbacks for results delivery.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://www.wappalyzer.com/docs/api/
-    baseURL: https://api.wappalyzer.com
-    tags:
-      - Web Crawling
-      - Technology Detection
-      - Async API
-    properties:
-      - type: Documentation
-        url: https://www.wappalyzer.com/docs/api/
-    contact:
-      - FN: Wappalyzer Support
-        url: https://www.wappalyzer.com/contact/
-
-  - name: Wappalyzer Dataset API
-    description: Bulk access to pre-built technographic datasets covering technology installations across millions of websites, suitable for market research and lead list generation.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://www.wappalyzer.com/docs/api/
-    baseURL: https://api.wappalyzer.com
-    tags:
-      - Dataset
-      - Bulk Data
-      - Market Research
-      - Lead Lists
-    properties:
-      - type: Documentation
-        url: https://www.wappalyzer.com/docs/api/
-    contact:
-      - FN: Wappalyzer Support
-        url: https://www.wappalyzer.com/contact/
-
+- name: Wappalyzer Analyze API
+  description: >-
+    Analyze a single website URL for technology stack detection, returning a detailed breakdown of all
+    identified technologies, frameworks, and platforms.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.wappalyzer.com/docs/api/
+  baseURL: https://api.wappalyzer.com
+  tags:
+  - Technology Analysis
+  - Website Analysis
+  - Technographics
+  properties:
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/
+  contact:
+  - FN: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+- name: Wappalyzer Crawl API
+  description: >-
+    Deep crawl API that indexes multiple pages of a website to build a comprehensive technology profile,
+    supporting asynchronous callbacks for results delivery.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.wappalyzer.com/docs/api/
+  baseURL: https://api.wappalyzer.com
+  tags:
+  - Web Crawling
+  - Technology Detection
+  - Async API
+  properties:
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/
+  contact:
+  - FN: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+- name: Wappalyzer Dataset API
+  description: >-
+    Bulk access to pre-built technographic datasets covering technology installations across millions
+    of websites, suitable for market research and lead list generation.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.wappalyzer.com/docs/api/
+  baseURL: https://api.wappalyzer.com
+  tags:
+  - Dataset
+  - Bulk Data
+  - Market Research
+  - Lead Lists
+  properties:
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/
+  contact:
+  - FN: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+- aid: wappalyzer:wappalyzer-basics-api
+  name: Wappalyzer Basics API
+  description: Shared authentication, billing, and response conventions.
+  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  baseURL: https://api.wappalyzer.com
+  tags:
+  - Basics
+  properties:
+  - type: OpenAPI
+    url: openapi/wappalyzer-basics-api-openapi.yml
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/v2/lookup/
+- aid: wappalyzer:wappalyzer-lists-api
+  name: Wappalyzer Lists API
+  description: Lead list creation, pricing, and download lifecycle.
+  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  baseURL: https://api.wappalyzer.com
+  tags:
+  - Lists
+  properties:
+  - type: OpenAPI
+    url: openapi/wappalyzer-lists-api-openapi.yml
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/v2/lookup/
+- aid: wappalyzer:wappalyzer-lookup-api
+  name: Wappalyzer Lookup API
+  description: Website technology lookup and asynchronous crawl callbacks.
+  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  baseURL: https://api.wappalyzer.com
+  tags:
+  - Lookup
+  properties:
+  - type: OpenAPI
+    url: openapi/wappalyzer-lookup-api-openapi.yml
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/v2/lookup/
+- aid: wappalyzer:wappalyzer-subdomains-api
+  name: Wappalyzer Subdomains API
+  description: Dataset-backed website-serving subdomain discovery.
+  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  baseURL: https://api.wappalyzer.com
+  tags:
+  - Subdomains
+  properties:
+  - type: OpenAPI
+    url: openapi/wappalyzer-subdomains-api-openapi.yml
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/v2/lookup/
+- aid: wappalyzer:wappalyzer-verify-api
+  name: Wappalyzer Verify API
+  description: Email verification and deliverability checks.
+  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  baseURL: https://api.wappalyzer.com
+  tags:
+  - Verify
+  properties:
+  - type: OpenAPI
+    url: openapi/wappalyzer-verify-api-openapi.yml
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/v2/lookup/
 common:
   - type: AgenticAccess
     url: agentic-access/wappalyzer-agentic-access.yml
