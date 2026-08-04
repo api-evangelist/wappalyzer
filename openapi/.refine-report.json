@@ -1,0 +1,22 @@
+{
+  "provider": "wappalyzer",
+  "sources": [
+    "wappalyzer-basics-api-openapi.yml",
+    "wappalyzer-lists-api-openapi.yml",
+    "wappalyzer-lookup-api-openapi.yml",
+    "wappalyzer-subdomains-api-openapi.yml",
+    "wappalyzer-verify-api-openapi.yml"
+  ],
+  "outputs": [
+    "wappalyzer-basics-api-openapi.yml",
+    "wappalyzer-lists-api-openapi.yml",
+    "wappalyzer-lookup-api-openapi.yml",
+    "wappalyzer-subdomains-api-openapi.yml",
+    "wappalyzer-verify-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
