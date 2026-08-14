@@ -17,7 +17,7 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/wappalyzer.png
 url: https://raw.githubusercontent.com/api-evangelist/wappalyzer/refs/heads/main/apis.yml
 created: '2026-06-13'
-modified: '2026-06-13'
+modified: '2026-08-14'
 specificationVersion: '0.19'
 type: Index
 tags:
@@ -28,6 +28,9 @@ tags:
   - Framework Detection
   - Lead Enrichment
   - Sales Intelligence
+  - Subdomain Discovery
+  - Email Verification
+  - Market Research
 
 apis:
 - name: Wappalyzer Analyze API
@@ -61,6 +64,8 @@ apis:
   properties:
   - type: Documentation
     url: https://www.wappalyzer.com/docs/api/
+  - type: Webhooks
+    url: asyncapi/wappalyzer-webhooks.yml
   contact:
   - FN: Wappalyzer Support
     url: https://www.wappalyzer.com/contact/
@@ -82,10 +87,84 @@ apis:
   contact:
   - FN: Wappalyzer Support
     url: https://www.wappalyzer.com/contact/
+- aid: wappalyzer:wappalyzer-public-api
+  name: Wappalyzer Public API
+  description: >-
+    The provider-published OpenAPI 3.1 contract for every documented public REST endpoint —
+    credit balance, technology lookup, lead lists, subdomain discovery and email verification —
+    including the two asynchronous completion callbacks. Downloaded verbatim from
+    https://www.wappalyzer.com/openapi/v2-public.yaml, which the provider links from its API
+    basics documentation as the machine-readable contract.
+  humanURL: https://www.wappalyzer.com/docs/api/v2/basics/
+  baseURL: https://api.wappalyzer.com/v2
+  tags:
+  - Technology Detection
+  - Lead Lists
+  - Subdomain Discovery
+  - Email Verification
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/wappalyzer-v2-public-openapi.yaml
+  - type: Overlay
+    url: overlays/wappalyzer-v2-public-overlay.yaml
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/api/v2/basics/
+  - type: Webhooks
+    url: asyncapi/wappalyzer-webhooks.yml
+  - type: DataModel
+    url: data-model/wappalyzer-data-model.yml
+  contact:
+  - FN: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+- aid: wappalyzer:wappalyzer-metadata-api
+  name: Wappalyzer Metadata API
+  description: >-
+    The four anonymous, unauthenticated technology and category reference endpoints on the v2
+    host — the technology directory (7,281 entries), a single technology profile, the category
+    directory (106 entries) and a single category with its member technologies. Absent from the
+    published contract; located from the provider's own open-source MCP server and confirmed
+    live on 2026-08-14. Consumes no credits and requires no API key.
+  humanURL: https://www.wappalyzer.com/technologies/
+  baseURL: https://api.wappalyzer.com/v2
+  tags:
+  - Metadata
+  - Technology Directory
+  - Categories
+  properties:
+  - type: OpenAPI
+    url: openapi/wappalyzer-metadata-api-openapi.yml
+  - type: Documentation
+    url: https://www.wappalyzer.com/technologies/
+  contact:
+  - FN: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+- aid: wappalyzer:wappalyzer-mcp
+  name: Wappalyzer MCP Server
+  description: >-
+    First-party hosted Model Context Protocol server at https://mcp.wappalyzer.com/mcp — remote
+    Streamable HTTP, OAuth 2.1 with PKCE and dynamic client registration, exposing three
+    read-only tools and four metadata resources. A first-party open-source local stdio server is
+    also published at github.com/wappalyzer/mcp.
+  humanURL: https://www.wappalyzer.com/docs/integrations/mcp/
+  baseURL: https://mcp.wappalyzer.com/mcp
+  tags:
+  - MCP
+  - Agents
+  - Technology Detection
+  properties:
+  - type: MCPServer
+    url: mcp/wappalyzer-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/wappalyzer-tool-crosswalk.yml
+  - type: Documentation
+    url: https://www.wappalyzer.com/docs/integrations/mcp/
+  contact:
+  - FN: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
 - aid: wappalyzer:wappalyzer-basics-api
   name: Wappalyzer Basics API
   description: Shared authentication, billing, and response conventions.
-  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  humanURL: https://www.wappalyzer.com/docs/api/v2/basics/
   baseURL: https://api.wappalyzer.com
   tags:
   - Basics
@@ -93,11 +172,13 @@ apis:
   - type: OpenAPI
     url: openapi/wappalyzer-basics-api-openapi.yml
   - type: Documentation
-    url: https://www.wappalyzer.com/docs/api/v2/lookup/
+    url: https://www.wappalyzer.com/docs/api/v2/basics/
+  - type: JSONSchema
+    url: json-schema/wappalyzer-technology.json
 - aid: wappalyzer:wappalyzer-lists-api
   name: Wappalyzer Lists API
   description: Lead list creation, pricing, and download lifecycle.
-  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  humanURL: https://www.wappalyzer.com/docs/api/v2/lists/
   baseURL: https://api.wappalyzer.com
   tags:
   - Lists
@@ -105,7 +186,9 @@ apis:
   - type: OpenAPI
     url: openapi/wappalyzer-lists-api-openapi.yml
   - type: Documentation
-    url: https://www.wappalyzer.com/docs/api/v2/lookup/
+    url: https://www.wappalyzer.com/docs/api/v2/lists/
+  - type: Examples
+    url: examples/wappalyzer-create-list-example.json
 - aid: wappalyzer:wappalyzer-lookup-api
   name: Wappalyzer Lookup API
   description: Website technology lookup and asynchronous crawl callbacks.
@@ -118,10 +201,14 @@ apis:
     url: openapi/wappalyzer-lookup-api-openapi.yml
   - type: Documentation
     url: https://www.wappalyzer.com/docs/api/v2/lookup/
+  - type: Examples
+    url: examples/wappalyzer-lookup-example.json
+  - type: JSONSchema
+    url: json-schema/wappalyzer-lookup-response.json
 - aid: wappalyzer:wappalyzer-subdomains-api
   name: Wappalyzer Subdomains API
   description: Dataset-backed website-serving subdomain discovery.
-  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  humanURL: https://www.wappalyzer.com/docs/api/v2/subdomains/
   baseURL: https://api.wappalyzer.com
   tags:
   - Subdomains
@@ -129,11 +216,11 @@ apis:
   - type: OpenAPI
     url: openapi/wappalyzer-subdomains-api-openapi.yml
   - type: Documentation
-    url: https://www.wappalyzer.com/docs/api/v2/lookup/
+    url: https://www.wappalyzer.com/docs/api/v2/subdomains/
 - aid: wappalyzer:wappalyzer-verify-api
   name: Wappalyzer Verify API
   description: Email verification and deliverability checks.
-  humanURL: https://www.wappalyzer.com/docs/api/v2/lookup/
+  humanURL: https://www.wappalyzer.com/docs/api/v2/verify/
   baseURL: https://api.wappalyzer.com
   tags:
   - Verify
@@ -141,7 +228,11 @@ apis:
   - type: OpenAPI
     url: openapi/wappalyzer-verify-api-openapi.yml
   - type: Documentation
-    url: https://www.wappalyzer.com/docs/api/v2/lookup/
+    url: https://www.wappalyzer.com/docs/api/v2/verify/
+  - type: Examples
+    url: examples/wappalyzer-verify-example.json
+  - type: JSONSchema
+    url: json-schema/wappalyzer-verify-result.json
 common:
   - type: AgenticAccess
     url: agentic-access/wappalyzer-agentic-access.yml
@@ -149,18 +240,78 @@ common:
     url: security/wappalyzer-domain-security.yml
   - type: Authentication
     url: authentication/wappalyzer-authentication.yml
+  - type: VulnerabilityDisclosure
+    url: security/wappalyzer-vulnerability-disclosure.yml
+  - type: Security
+    url: https://api.wappalyzer.com/.well-known/security.txt
+  - type: SecurityTxt
+    url: well-known/wappalyzer-security.txt
+  - type: WellKnown
+    url: well-known/wappalyzer-well-known.yml
   - type: Website
     url: https://www.wappalyzer.com/
+  - type: DeveloperPortal
+    url: https://www.wappalyzer.com/api/
   - type: Documentation
     url: https://www.wappalyzer.com/docs/api/
-  - type: GitHubOrg
+  - type: APIReference
+    url: https://www.wappalyzer.com/docs/api/v2/basics/
+  - type: GettingStarted
+    url: https://www.wappalyzer.com/docs/api/v2/basics/
+  - type: OpenAPI
+    url: https://www.wappalyzer.com/openapi/v2-public.yaml
+  - type: MCPServer
+    url: mcp/wappalyzer-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/wappalyzer-tool-crosswalk.yml
+  - type: LLMsTxt
+    url: llms/wappalyzer-llms.txt
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Webhooks
+    url: asyncapi/wappalyzer-webhooks.yml
+  - type: Conventions
+    url: conventions/wappalyzer-conventions.yml
+  - type: ErrorCatalog
+    url: errors/wappalyzer-problem-types.yml
+  - type: DataModel
+    url: data-model/wappalyzer-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/wappalyzer-lifecycle.yml
+  - type: Conformance
+    url: conformance/wappalyzer-conformance.yml
+  - type: Packages
+    url: packages/wappalyzer-packages.yml
+  - type: Overlay
+    url: overlays/wappalyzer-v2-public-overlay.yaml
+  - type: Vocabulary
+    url: vocabulary/wappalyzer-vocabulary.yml
+  - type: SpectralRules
+    url: rules/wappalyzer-jsonschema-spectral-rules.yml
+  - type: JSONLDContext
+    url: json-ld/wappalyzer-context.jsonld
+  - type: GitHubOrganization
     url: https://github.com/wappalyzer
+  - type: GitHubRepository
+    url: https://github.com/wappalyzer/mcp
   - type: LinkedIn
     url: https://www.linkedin.com/company/wappalyzer
   - type: X
     url: https://twitter.com/Wappalyzer
+  - type: Blog
+    url: https://www.wappalyzer.com/articles/
+  - type: Support
+    url: https://www.wappalyzer.com/contact/
+  - type: HelpCenter
+    url: https://www.wappalyzer.com/faq/api/
   - type: Pricing
     url: https://www.wappalyzer.com/pricing/
+  - type: SignUp
+    url: https://www.wappalyzer.com/account/
+  - type: TermsOfService
+    url: https://www.wappalyzer.com/terms/
+  - type: PrivacyPolicy
+    url: https://www.wappalyzer.com/privacy/
   - type: StatusPage
     url: https://status.wappalyzer.com/
   - type: Plans
@@ -173,3 +324,9 @@ common:
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+
+x-enrichment:
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v1
