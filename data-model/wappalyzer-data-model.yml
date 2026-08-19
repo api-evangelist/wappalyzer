@@ -1,0 +1,184 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/_original/wappalyzer-v2-public-openapi.yaml
+sources:
+  - openapi/_original/wappalyzer-v2-public-openapi.yaml
+  - openapi/wappalyzer-metadata-api-openapi.yml
+description: >-
+  Entity graph derived from the $ref links and id-reference fields in Wappalyzer's published
+  OpenAPI 3.1 contract, plus the anonymous metadata endpoints. Technology is the hub: everything
+  else either describes a technology, is discovered by matching one, or is a query over the
+  technology-to-website index. Only Lead List is a persisted, addressable resource with a
+  lifecycle; every other entity is a projection returned by a read.
+
+entities:
+  - name: Technology
+    schema: Technology
+    identifier: slug
+    id_format: lowercase-hyphenated
+    persisted: true
+    addressable: true
+    endpoints:
+      - GET /technologies/ (listTechnologies, anonymous)
+      - GET /technologies/{slug}/ (getTechnology, anonymous)
+    fields_core: [slug, name, cpe, versions, categories, trafficRank, confirmedAt]
+    fields_profile: [icon, website, description, pricing, saas, oss, versioned, hostnames, hits, createdAt, topIpCountries, topLanguages, topIndustries, topCompanySizes, topHostnames, alternatives]
+    note: >-
+      Two shapes exist for the same entity. The embedded form inside a lookup result carries
+      detection facts (versions, cpe, confirmedAt, trafficRank); the directory form on
+      /technologies/{slug}/ carries the catalogue profile (adoption counts, vendor site,
+      pricing metadata, alternatives). They share slug/name/categories and nothing else.
+      Observed population 2026-08-14: 7,281 technologies.
+
+  - name: Category
+    schema: Category
+    identifier: slug
+    secondary_identifier: id (integer)
+    persisted: true
+    addressable: true
+    endpoints:
+      - GET /categories/ (listCategories, anonymous)
+      - GET /categories/{slug}/ (getCategory, anonymous)
+    fields: [id, slug, name, technologiesCount, groups, priority]
+    note: >-
+      `priority` appears only on the embedded CategoryRef inside a technology, expressing which
+      category is primary for that technology, not a property of the category itself. Observed
+      population 2026-08-14: 106 categories.
+
+  - name: Group
+    identifier: slug
+    persisted: true
+    addressable: false
+    fields: [id, slug, name]
+    note: Top-level grouping over categories (Analytics, Sales, Web development, ...). No endpoint of its own; only ever embedded.
+
+  - name: Website
+    schema: LookupCompleted / LookupPending / LookupError
+    identifier: url
+    persisted: false
+    addressable: false
+    endpoints:
+      - GET /lookup (lookupWebsites)
+    fields: [url, technologies, technologySpend, trafficLevel, crawl, errors]
+    variants:
+      - {name: LookupCompleted, discriminator: 'technologies present', required: [url, technologies]}
+      - {name: LookupPending, discriminator: 'crawl == true', required: [url, crawl]}
+      - {name: LookupError, discriminator: 'errors present', required: [url, errors]}
+    note: >-
+      LookupResponseItem is a oneOf over the three variants and there is no explicit
+      discriminator property, so a consumer must branch on which required fields are present.
+      technologySpend and trafficLevel are both five-point ordinal enums
+      (Very low / Low / Medium / High / Very high), populated only when the `signals` set is
+      requested and Wappalyzer holds current data.
+
+  - name: Subdomain
+    schema: SubdomainRecord
+    identifier: hostname (the map key)
+    persisted: true
+    addressable: false
+    endpoints:
+      - GET /subdomains (lookupSubdomains)
+    fields: [createdAt, updatedAt]
+    note: >-
+      SubdomainsResult holds `subdomains` as an OBJECT keyed by hostname rather than an array,
+      so the identifier lives in the key and is absent from the record body. `moreAfter` is the
+      cursor to pass back as `after`.
+
+  - name: EmailVerification
+    schema: VerifyResult
+    identifier: email
+    persisted: false
+    addressable: false
+    endpoints:
+      - GET /verify (verifyEmail)
+    fields: [email, domain, reachable, disposable, roleAccount, mxValid, connection, inboxFull, catchAll, deliverable, disabled, syntaxValid]
+    note: >-
+      Twelve of thirteen fields are required, so the shape is stable. `reachable` is the summary
+      verdict (safe / risky / invalid / unknown); the remaining booleans are the evidence behind
+      it. The only entity in the API unrelated to technology detection.
+
+  - name: LeadList
+    schema: ListSummary / ListDetail
+    identifier: id
+    id_prefix: 'lst_'
+    id_pattern: '^lst_'
+    persisted: true
+    addressable: true
+    lifecycle: true
+    endpoints:
+      - GET /lists (listLeadLists)
+      - POST /lists (createLeadList)
+      - GET /lists/{id} (getLeadList)
+      - POST /lists/{id} (finalizeLeadList)
+      - DELETE /lists/{id} (deleteLeadList)
+    fields: [id, createdAt, status, totalCredits, rows, technologies, keywords, languages, countries, industries, companySizes, tlds, matchCountryLanguage, matchTechnologies, subset, subsetSlice, minAge, maxAge, fromDate, requiredSets, excludeNoTraffic, excludeMultilingual, sets, url]
+    note: >-
+      The only resource with a state machine and the only one that can be mutated. A lead list is
+      a saved QUERY over the technology-to-website index plus the exported rows it produced.
+
+  - name: ListTechnology
+    schema: ListTechnology
+    persisted: false
+    addressable: false
+    fields: [slug, name, operator, version, categories]
+    note: >-
+      A technology as a FILTER CLAUSE rather than a fact: `operator` is one of =, >=, <= (pattern
+      ^[<>]?=$) applied against `version`. This is what makes a lead list a query object.
+
+  - name: CreditsBalance
+    schema: CreditsBalance
+    identifier: null
+    persisted: true
+    addressable: true
+    endpoints:
+      - GET /credits/balance (getCreditBalance)
+    fields: [credits]
+    note: Account-level singleton. Also surfaced on every response via the wappalyzer-credits-* headers.
+
+relationships:
+  - {from: Technology, to: Category, type: has_many, via: categories, source: 'Technology.categories -> $ref Category'}
+  - {from: Category, to: Technology, type: has_many, via: technologies, source: 'CategoryDetail.technologies map, keyed by technology slug'}
+  - {from: Category, to: Group, type: has_many, via: groups}
+  - {from: Website, to: Technology, type: has_many, via: technologies, source: 'LookupCompleted.technologies -> $ref Technology'}
+  - {from: Technology, to: Technology, type: has_many, via: alternatives, source: 'getTechnology.alternatives[].slug', note: 'Self-referential — competing technologies within a category.'}
+  - {from: LeadList, to: ListTechnology, type: has_many, via: technologies}
+  - {from: ListTechnology, to: Technology, type: belongs_to, via: slug, note: 'Soft reference by slug; no $ref binding in the spec.'}
+  - {from: ListTechnology, to: Category, type: has_many, via: categories}
+  - {from: LeadList, to: Category, type: has_many, via: categories, note: 'CreateListRequest.categories is an array of category slugs.'}
+  - {from: LeadList, to: ListStatus, type: has_one, via: status}
+  - {from: SubdomainsResult, to: Subdomain, type: has_many, via: subdomains, note: 'Map keyed by hostname, not an array.'}
+  - {from: EmailVerification, to: Website, type: belongs_to, via: domain, note: 'Soft reference by domain string; not linked in the spec.'}
+
+state_machines:
+  - entity: LeadList
+    field: status
+    schema: ListStatus
+    states: [Calculating, Ready, Failed, Insufficient, Complete]
+    transitions:
+      - {from: null, to: Calculating, trigger: 'POST /lists (createLeadList) — returns CreateListAccepted with status Calculating'}
+      - {from: Calculating, to: Ready, trigger: 'Asynchronous generation completes; delivered via the listReady callback (ListReadyCallback) or by polling GET /lists/{id}'}
+      - {from: Calculating, to: Failed, trigger: Generation error}
+      - {from: Calculating, to: Insufficient, trigger: 'Too few matching rows to build the list'}
+      - {from: Ready, to: Complete, trigger: 'POST /lists/{id} (finalizeLeadList) with spendCredits — returns FinalizeListResponse with status Complete and the download url'}
+      - {from: any, to: deleted, trigger: 'DELETE /lists/{id} (deleteLeadList)'}
+    note: >-
+      Credits are only spent at the Ready -> Complete transition, via the required `spendCredits`
+      integer on FinalizeListRequest. Everything before that is a free preview: Ready carries
+      `totalCredits` and a `sampleUrl` so the caller can price and inspect the list before
+      committing. This two-phase commit is the most important semantic in the API and is not
+      protected by any idempotency key — see conventions/wappalyzer-conventions.yml.
+
+id_prefixes:
+  - {prefix: 'lst_', entity: LeadList, source: 'pattern ^lst_ on ListSummary/ListDetail/CreateListAccepted/FinalizeListResponse/ListReadyCallback'}
+
+timestamps:
+  format: unix epoch seconds (integer)
+  fields: [createdAt, updatedAt, confirmedAt, fromDate]
+  note: No RFC 3339 date-time anywhere in the contract; every timestamp is an integer epoch.
+
+summary:
+  entities: 10
+  addressable_resources: 5
+  relationships: 12
+  state_machines: 1
+  id_prefixes: 1

@@ -1,0 +1,178 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Wappalyzer Public API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-14'
+  method: generated
+  source: >-
+    Derived from artifacts in this repo — conventions/wappalyzer-conventions.yml,
+    errors/wappalyzer-problem-types.yml, data-model/wappalyzer-data-model.yml,
+    rate-limits/wappalyzer-rate-limits.yml, asyncapi/wappalyzer-webhooks.yml — applied over the
+    provider's published contract. Nothing here contradicts the provider; every addition is
+    either a documented fact restated in-spec or an explicitly labelled API Evangelist
+    observation. The original document at openapi/_original/wappalyzer-v2-public-openapi.yaml is
+    never mutated.
+extends: openapi/_original/wappalyzer-v2-public-openapi.yaml
+
+actions:
+  - target: $.info
+    description: Record the provenance of the harvested contract and its companion artifacts.
+    update:
+      x-apievangelist-source: https://www.wappalyzer.com/openapi/v2-public.yaml
+      x-apievangelist-harvested: '2026-08-14'
+      x-apievangelist-artifacts:
+        conventions: conventions/wappalyzer-conventions.yml
+        errors: errors/wappalyzer-problem-types.yml
+        data-model: data-model/wappalyzer-data-model.yml
+        webhooks: asyncapi/wappalyzer-webhooks.yml
+        rate-limits: rate-limits/wappalyzer-rate-limits.yml
+        plans: plans/wappalyzer-plans-pricing.yml
+        mcp: mcp/wappalyzer-mcp.yml
+      x-apievangelist-companion-spec:
+        file: openapi/wappalyzer-metadata-api-openapi.yml
+        note: >-
+          Four anonymous metadata endpoints (/technologies/, /technologies/{slug}/, /categories/,
+          /categories/{slug}/) exist on the same server but are absent from this document. They
+          were located from the vendor's own open-source MCP server and confirmed live.
+
+  - target: $.info
+    description: Add the contact and terms links the published document omits.
+    update:
+      contact:
+        name: Wappalyzer Support
+        url: https://www.wappalyzer.com/contact/
+        email: hello@wappalyzer.com
+      termsOfService: https://www.wappalyzer.com/terms/
+
+  - target: $.servers
+    description: Document the metering headers and the plan gate that apply to the whole server.
+    update:
+      - url: https://api.wappalyzer.com/v2
+        description: >-
+          Production. HTTPS only. Every successful response carries wappalyzer-credits-spent and
+          wappalyzer-credits-remaining. A Business plan or above is required for API access.
+
+  - target: $.components.securitySchemes.ApiKeyAuth
+    description: State the key model — account-scoped, no scopes, no rotation contract.
+    update:
+      description: >-
+        A single account-scoped API key created in the Wappalyzer account and sent in the
+        x-api-key header. There are no scopes, no expiry and no documented rotation or revocation
+        contract, so the key is all-or-nothing for every operation. OAuth exists only on the
+        separate hosted MCP surface at mcp.wappalyzer.com.
+      x-apievangelist-scopes: none
+      x-apievangelist-rotation: not documented
+
+  - target: $.components.responses.Forbidden
+    description: Flag that 403 is overloaded across three unrelated failure causes.
+    update:
+      x-apievangelist-note: >-
+        Overloaded. 403 means any of: an incorrect API key, an invalid method or resource, OR an
+        exhausted credit balance. Most APIs signal quota exhaustion with 402 or 429, so retry
+        logic keyed on those statuses will not catch a depleted Wappalyzer account. Call
+        GET /credits/balance to disambiguate.
+      x-apievangelist-retryable: conditional
+
+  - target: $.components.responses.TooManyRequests
+    description: Record that no Retry-After is published.
+    update:
+      x-apievangelist-note: >-
+        No Retry-After header is declared and no numeric rate limit is published. Back off
+        exponentially. The credit headers are the only runtime budget signal; there are no
+        RateLimit-* or X-RateLimit-* headers.
+      x-apievangelist-retryable: true
+
+  - target: $.paths['/lookup'].get
+    description: Make the cost model, the partial-failure semantics and the async path explicit.
+    update:
+      x-apievangelist-cost:
+        cached: {credits: 1, unit: per URL, condition: 'live=false (default)'}
+        live_single_page: {credits: 1, unit: per URL, condition: 'live=true, recursive=false'}
+        live_recursive: {credits: 5, unit: per URL, condition: 'live=true, recursive=true'}
+      x-apievangelist-partial-failure: >-
+        The 200 response is an array of LookupResponseItem, a oneOf with NO discriminator
+        property. Items may independently be LookupCompleted (technologies present),
+        LookupPending (crawl == true) or LookupError (errors present) in the same response, so
+        HTTP 200 does not mean every URL succeeded. Consumers must branch per item.
+      x-apievangelist-async: >-
+        live=true with recursive=true and no cached record completes asynchronously in up to 15
+        minutes. Supply callback_url to receive the result, or re-query up to three times five
+        minutes apart.
+      x-apievangelist-batch-limit: 10
+
+  - target: $.paths['/lookup'].get.callbacks.lookupCompleted
+    description: Document the callback signing scheme and its limits.
+    update:
+      x-apievangelist-signing:
+        header: wappalyzer-signature
+        algorithm: sha256(secret + rawRequestBody)
+        optional: true
+        weaknesses:
+          - Plain SHA256 concatenation rather than an HMAC.
+          - No timestamp in the signed material, so a captured callback can be replayed.
+          - Opt-in; the header parameter is declared required:false, so unsigned callbacks are valid.
+
+  - target: $.paths['/lists'].post
+    description: Flag the replay risk on the create half of the two-phase commit.
+    update:
+      x-apievangelist-idempotency:
+        supported: false
+        risk: >-
+          No idempotency key. A retry after a timeout can create a duplicate lead list. Call
+          GET /lists to reconcile before retrying.
+      x-apievangelist-phase: 'calculate (free) — returns status Calculating; no credits are spent here'
+
+  - target: $.paths['/lists/{id}'].post
+    description: Flag the double-spend risk on the commit half of the two-phase commit.
+    update:
+      x-apievangelist-idempotency:
+        supported: false
+        risk: >-
+          No idempotency key on a credit-spending write. A retry after a timeout can double-spend.
+          Call GET /lists/{id} and check for status Complete before retrying.
+      x-apievangelist-phase: >-
+        commit (paid) — spendCredits is the caller's explicit authorization to spend. Verify
+        totalCredits and the sampleUrl from the Ready state before calling.
+
+  - target: $.paths['/subdomains'].get
+    description: Record the undocumented limit constraint and the response shape trap.
+    update:
+      x-apievangelist-note: >-
+        limit must be between 10 and 1000 AND a multiple of 10 — the multiple-of-ten rule is
+        enforced by the vendor's own MCP client. SubdomainsResult.subdomains is an OBJECT keyed
+        by hostname, not an array, so the identifier lives in the key and is absent from each
+        SubdomainRecord body. Paginate by passing the returned moreAfter back as after.
+
+  - target: $.components.schemas.VerifyResult
+    description: Explain how to read the verdict against its evidence fields.
+    update:
+      x-apievangelist-note: >-
+        reachable is the verdict; the remaining booleans are the evidence. catchAll=true means
+        the domain accepts every address, so deliverable proves nothing — that combination is the
+        usual cause of reachable="risky". roleAccount=true (info@, sales@) is deliverable but is
+        not a person.
+
+  - target: $.components.schemas.ListStatus
+    description: Attach the lead-list state machine to its status enum.
+    update:
+      x-apievangelist-state-machine:
+        Calculating: 'entry state from POST /lists; free'
+        Ready: 'priced and sampled — totalCredits and sampleUrl available; still free'
+        Insufficient: 'too few matching rows; loosen the query rather than retrying'
+        Failed: 'generation error'
+        Complete: 'reached only via POST /lists/{id} with spendCredits; credits are spent here'
+
+  - target: $.tags
+    description: Note the undocumented Metadata tag served by the same host.
+    update:
+      - name: Basics
+      - name: Lookup
+      - name: Lists
+      - name: Subdomains
+      - name: Verify
+      - name: Metadata
+        description: >-
+          API Evangelist addition. Anonymous technology and category reference data on the same
+          server, absent from the published contract. See
+          openapi/wappalyzer-metadata-api-openapi.yml.

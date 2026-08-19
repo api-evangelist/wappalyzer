@@ -1,0 +1,52 @@
+generated: '2026-08-14'
+method: generated
+source: >-
+  openapi/_original/wappalyzer-v2-public-openapi.yaml, openapi/wappalyzer-metadata-api-openapi.yml,
+  conventions/wappalyzer-conventions.yml, errors/wappalyzer-problem-types.yml,
+  data-model/wappalyzer-data-model.yml
+description: >-
+  Packaged Agent Skills for the Wappalyzer v2 API. Every operationId referenced below exists
+  verbatim in the linked spec — the nine authenticated operations come from Wappalyzer's own
+  published OpenAPI 3.1 contract, and the four metadata operations from the anonymous endpoints
+  probed live on 2026-08-14. Wappalyzer publishes no AGENTS.md or first-party skill files;
+  https://www.wappalyzer.com/llms.txt is the closest thing and is captured in llms/.
+
+skills:
+  - file: wappalyzer-technology-lookup.md
+    name: Look up the technology stack of a website
+    api: openapi/_original/wappalyzer-v2-public-openapi.yaml
+    operations: [getCreditBalance, lookupWebsites]
+    summary: >-
+      Cached vs live vs recursive, the ten-URL batch cap, the three-variant response array, the
+      asynchronous crawl and its signed callback, and reading the credit headers.
+
+  - file: wappalyzer-build-lead-list.md
+    name: Build and finalize a technographic lead list
+    api: openapi/_original/wappalyzer-v2-public-openapi.yaml
+    operations: [getCreditBalance, listCategories, listTechnologies, createLeadList, getLeadList, listLeadLists, finalizeLeadList, deleteLeadList]
+    summary: >-
+      The two-phase commit — free calculation and sample, then an explicit spendCredits
+      finalize — plus the ListStatus state machine and the duplicate/double-spend risk from
+      having no idempotency key.
+
+  - file: wappalyzer-domain-recon.md
+    name: Profile a domain's subdomains and verify contact emails
+    api: openapi/_original/wappalyzer-v2-public-openapi.yaml
+    operations: [getCreditBalance, lookupSubdomains, lookupWebsites, verifyEmail]
+    summary: >-
+      Cursor pagination with the multiple-of-ten limit rule, the hostname-keyed subdomain map,
+      batch profiling within budget, and how to read the VerifyResult evidence fields.
+
+  - file: wappalyzer-technology-directory.md
+    name: Browse the technology and category directory without an API key
+    api: openapi/wappalyzer-metadata-api-openapi.yml
+    operations: [listTechnologies, getTechnology, listCategories, getCategory]
+    summary: >-
+      The four anonymous, credit-free metadata endpoints — slug resolution, taxonomy, technology
+      profiles and adoption data — to be used before spending on any paid call.
+
+coverage:
+  skills: 4
+  operations_covered: 13
+  operations_total: 13
+  note: Every operation in both specs is exercised by at least one skill.

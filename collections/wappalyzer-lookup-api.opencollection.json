@@ -1,0 +1,99 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wappalyzer Public Basics Lookup API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Lookup",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Look up technologies and related website intelligence",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wappalyzer.com/v2/lookup",
+            "params": [
+              {
+                "name": "urls",
+                "value": "",
+                "type": "query",
+                "description": "Between one and ten website URLs, comma separated. Multiple URLs are not supported with `recursive=false`."
+              },
+              {
+                "name": "live",
+                "value": "",
+                "type": "query",
+                "description": "Scan websites in real time instead of relying on cached results when needed."
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "Follow internal links for increased coverage. Asynchronous when true and a crawl is required."
+              },
+              {
+                "name": "callback_url",
+                "value": "",
+                "type": "query",
+                "description": "Public callback URL that receives asynchronous lookup results."
+              },
+              {
+                "name": "debug_email",
+                "value": "",
+                "type": "query",
+                "description": "Debug-only email address that receives callback troubleshooting information."
+              },
+              {
+                "name": "sets",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of additional result field sets to include. Use `signals` to request `technologySpend` and `trafficLevel`."
+              },
+              {
+                "name": "denoise",
+                "value": "",
+                "type": "query",
+                "description": "Exclude low-confidence detections."
+              },
+              {
+                "name": "min_age",
+                "value": "",
+                "type": "query",
+                "description": "Return results verified at least this many months ago."
+              },
+              {
+                "name": "max_age",
+                "value": "",
+                "type": "query",
+                "description": "Return results verified within the last `max_age` months."
+              },
+              {
+                "name": "squash",
+                "value": "",
+                "type": "query",
+                "description": "Merge monthly results into a single result set."
+              }
+            ]
+          },
+          "docs": "Looks up one or more websites. The response can complete synchronously\nor return pending crawl markers when an asynchronous crawl is required.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

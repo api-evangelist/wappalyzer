@@ -1,0 +1,168 @@
+generated: '2026-08-14'
+method: derived
+source: openapi/_original/wappalyzer-v2-public-openapi.yaml + well-known/ + mcp/
+sources:
+  - openapi/_original/wappalyzer-v2-public-openapi.yaml
+  - well-known/wappalyzer-well-known.yml
+  - mcp/wappalyzer-mcp.yml
+  - https://www.wappalyzer.com/privacy/
+  - https://www.wappalyzer.com/terms/
+description: >-
+  Which cross-cutting standards the Wappalyzer surface actually conforms to, judged from the
+  published contract and live probes rather than from marketing claims. The pattern is a strong
+  agent/discovery standards posture (OpenAPI 3.1, MCP, RFC 8414/9728 OAuth metadata, RFC 9116,
+  llms.txt) sitting on a thin HTTP-semantics posture (no RFC 9457, no RFC 8594, no standard
+  rate-limit headers) and no published compliance certifications at all.
+
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: >-
+      Provider publishes OpenAPI 3.1.0 at https://www.wappalyzer.com/openapi/v2-public.yaml,
+      linked from /docs/api/v2/basics/ as a downloadable contract. Uses 3.1-native
+      type: [string, "null"] unions, components.parameters/headers/responses reuse, and
+      OpenAPI callbacks.
+
+  - id: json
+    conforms: true
+    evidence: All responses application/json; provider states "Returns JSON data".
+
+  - id: rest
+    conforms: partial
+    evidence: >-
+      Provider claims "Conforms to REST principles". Resource-oriented paths and correct verbs
+      on /lists. Deviations: finalizeLeadList is a POST to the item URL acting as an action, and
+      HTTP 403 is overloaded to mean quota exhaustion as well as authorization failure.
+
+  - id: https-only
+    conforms: true
+    evidence: Provider states "Are HTTPS only"; all servers[] entries are https.
+
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors are a bespoke {"url", "errors": [string]} envelope with no type/title/detail/status
+      members and no application/problem+json media type.
+
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Sunset or Deprecation header declared; no deprecation policy published.
+
+  - id: ratelimit-headers
+    conforms: false
+    evidence: >-
+      No RateLimit-* (draft-ietf-httpapi-ratelimit-headers) or X-RateLimit-* headers declared or
+      documented. Metering is signalled with proprietary wappalyzer-credits-spent /
+      wappalyzer-credits-remaining headers instead.
+
+  - id: rfc9116-security-txt
+    conforms: true
+    evidence: >-
+      https://api.wappalyzer.com/.well-known/security.txt returns 200 text/plain with Contact,
+      Canonical, Preferred-Languages and an unexpired Expires field.
+    note: Minimal — no Policy field; not served from the primary www host.
+
+  - id: rfc8615-well-known
+    conforms: partial
+    evidence: >-
+      Real /.well-known documents on api.wappalyzer.com and mcp.wappalyzer.com. The www host is
+      an SPA whose catch-all returns HTTP 200 HTML for every /.well-known/* path, which
+      technically violates the expectation that an unserved well-known path 404s.
+
+  - id: oauth2
+    conforms: true
+    scope: MCP surface only
+    evidence: >-
+      mcp.wappalyzer.com implements authorization_code + refresh_token with mandatory PKCE S256,
+      a revocation endpoint, and dynamic client registration.
+    note: The REST API itself uses a static account API key, not OAuth.
+
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: true
+    evidence: https://mcp.wappalyzer.com/.well-known/oauth-authorization-server returns 200 with issuer, endpoints, grant types, scopes and PKCE methods.
+
+  - id: rfc9728-oauth-protected-resource-metadata
+    conforms: true
+    evidence: >-
+      https://mcp.wappalyzer.com/.well-known/oauth-protected-resource/mcp returns 200; the 401
+      challenge on POST /mcp advertises it via the resource_metadata parameter, which is the
+      RFC 9728 discovery flow done correctly.
+
+  - id: rfc7591-dynamic-client-registration
+    conforms: true
+    evidence: registration_endpoint https://mcp.wappalyzer.com/oauth/register advertised in authorization-server metadata.
+
+  - id: rfc7636-pkce
+    conforms: true
+    evidence: code_challenge_methods_supported ["S256"].
+
+  - id: openid-connect
+    conforms: false
+    evidence: No /.well-known/openid-configuration on any host (403 on api, 404 on mcp, SPA shell on www).
+
+  - id: mcp
+    conforms: true
+    evidence: >-
+      Hosted Streamable HTTP MCP server at https://mcp.wappalyzer.com/mcp (probed 2026-08-14,
+      401 OAuth challenge with scope mcp:tools) plus a first-party open-source stdio server at
+      github.com/wappalyzer/mcp built on @modelcontextprotocol/sdk 1.27.1. Exposes both tools
+      and resources.
+
+  - id: a2a
+    conforms: false
+    evidence: >-
+      No agent card. /.well-known/agent-card.json and /.well-known/agent.json return 403 on
+      api.wappalyzer.com, 404 on mcp.wappalyzer.com, and the SPA HTML shell on www.
+
+  - id: llms-txt
+    conforms: true
+    evidence: >-
+      https://www.wappalyzer.com/llms.txt (200, text/plain) and
+      https://www.wappalyzer.com/llms-full.txt (200) — both authored, structured and current,
+      including explicit usage directives and a pointer to the MCP endpoint.
+
+  - id: asyncapi
+    conforms: false
+    evidence: No AsyncAPI document. The event surface is two OpenAPI callbacks blocks — see asyncapi/wappalyzer-webhooks.yml.
+
+  - id: webhook-signing
+    conforms: partial
+    evidence: >-
+      wappalyzer-signature header with sha256(secret + rawBody). Not an HMAC, no timestamp, and
+      opt-in, so it is weaker than the standard webhook-signing pattern.
+
+  - id: json-schema-2020-12
+    conforms: true
+    evidence: Implied by OpenAPI 3.1.0, which aligns its schema object with JSON Schema 2020-12.
+
+  - id: scim
+    conforms: false
+  - id: odata
+    conforms: false
+  - id: fhir
+    conforms: false
+  - id: fapi
+    conforms: false
+  - id: psd2
+    conforms: false
+  - id: json-api
+    conforms: false
+
+compliance_program:
+  published: false
+  certifications: []
+  trust_center: false
+  dpa_offered: not published
+  evidence: >-
+    The privacy policy names no framework or certification — no GDPR, CCPA, SOC 2, ISO 27001,
+    Privacy Shield, sub-processor list, DPA or DPO. Its only security statement is "We use
+    reasonable technical and organizational measures designed to protect personal information."
+    /trust/ and /compliance/ return the SPA 404 shell. No Compliance pointer is emitted, because
+    there is no published compliance program to point at.
+  entity: Wappalyzer Pty Ltd, PO Box 449, Aireys Inlet, 3231 VIC, Australia (ABN 87645916043)
+
+summary:
+  conforms: 12
+  partial: 3
+  does_not_conform: 12
+  certifications_published: 0

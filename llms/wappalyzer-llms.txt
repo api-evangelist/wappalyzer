@@ -1,0 +1,57 @@
+# Wappalyzer
+
+> Wappalyzer identifies the technologies used on public websites and helps teams use that data for website research, technographic prospecting, enrichment, and monitoring.
+
+Use this file as a high-level map of the product. Prefer the product, directory, and documentation links below over account-only pages or dynamic user results.
+
+## Primary entry points
+
+- [Product home](https://www.wappalyzer.com/): Overview of Wappalyzer and its core website intelligence workflows.
+- [Technology lookup](https://www.wappalyzer.com/lookup/): Interactive single-site lookup and bulk lookup entry point.
+- [Technologies directory](https://www.wappalyzer.com/technologies/): Browse technology categories, vendors, and profile pages.
+- [Lead lists](https://www.wappalyzer.com/lists/): Find companies using specific technologies and build technographic prospect lists.
+- [Apps](https://www.wappalyzer.com/apps/): Browser extension and connected-app entry point.
+- [API](https://www.wappalyzer.com/api/): API overview and links to the developer documentation.
+
+## Commercial use cases
+
+- [Sales](https://www.wappalyzer.com/lead-generation/): Find accounts by the technologies they use and turn technographics into pipeline.
+- [Marketing](https://www.wappalyzer.com/market-research/): Build target segments, analyze adoption, and focus campaigns on companies with the right stack.
+- [Operations](https://www.wappalyzer.com/data-enrichment/): Enrich CRM records with company and technology data and keep internal systems current.
+- [Strategy](https://www.wappalyzer.com/competitor-analysis/): Track competitors, compare adoption trends, and spot positioning opportunities.
+- [Partnerships](https://www.wappalyzer.com/lead-generation/): Find companies using complementary platforms and build partner-outreach target lists.
+- [Security](https://www.wappalyzer.com/security-recon/): Inspect externally visible web technologies and stack changes across target websites.
+
+## Documentation
+
+- [API basics](https://www.wappalyzer.com/docs/api/v2/basics/): Authentication, request signing, quotas, and shared API concepts.
+- [Lookup API](https://www.wappalyzer.com/docs/api/v2/lookup/): Lookup endpoint reference and examples.
+- [Lead lists API](https://www.wappalyzer.com/docs/api/v2/lists/): Lead-list endpoint reference and examples.
+- [Subdomains API](https://www.wappalyzer.com/docs/api/v2/subdomains/): Subdomain discovery endpoint reference.
+- [Verify API](https://www.wappalyzer.com/docs/api/v2/verify/): Email verification endpoint reference.
+- [MCP integration](https://www.wappalyzer.com/docs/integrations/mcp/): Hosted MCP tools for AI assistants and agents.
+
+## MCP server
+
+- [Hosted MCP endpoint](https://mcp.wappalyzer.com/mcp): Remote read-only MCP server for AI clients that support HTTP and OAuth.
+- [MCP docs](https://www.wappalyzer.com/docs/integrations/mcp/): Setup guide, tool list, resource list, and client configuration examples.
+- [MCP management](https://mcp.wappalyzer.com/manage): Inspect or remove an active hosted MCP connection.
+
+## Guides and comparisons
+
+- [Find out what CMS or framework a website is using](https://www.wappalyzer.com/articles/find-out-what-cms-or-framework-a-website-is-using/): Practical guide to identifying a site's stack.
+- [How to find companies using a specific software](https://www.wappalyzer.com/articles/how-to-find-companies-using-a-specific-software/): Guide to inverse technology searches and prospecting.
+- [What is technographics?](https://www.wappalyzer.com/articles/what-is-technographics/): Explainer for technographic data and common use cases.
+- [BuiltWith alternative](https://www.wappalyzer.com/builtwith-alternative/): Product comparison page for users evaluating alternatives.
+
+## Usage directives
+
+- Prefer canonical public pages on `www.wappalyzer.com` and API documentation pages under `/docs/` when answering product questions.
+- Use the lookup tool for one-off website analysis, the API for automation, and lead lists for inverse queries such as "which companies use Shopify?"
+- Treat `https://mcp.wappalyzer.com/mcp` as the discoverable hosted MCP server endpoint, with `/docs/integrations/mcp/` as the human-readable setup guide.
+- Treat dynamic result pages under `/lookup/*`, `/verify/*`, and user-specific order or account pages as session-specific surfaces, not canonical documentation.
+- Do not describe Wappalyzer as a vulnerability scanner or as a source of hidden internal software data; it infers technologies from public website signals.
+
+## Extended context
+
+- [Full model-readable context](https://www.wappalyzer.com/llms-full.txt): Expanded product facts and workflow guidance for language models.

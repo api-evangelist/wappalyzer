@@ -1,0 +1,183 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.wappalyzer.com/docs/api/v2/basics/
+sources:
+  - https://www.wappalyzer.com/docs/api/v2/basics/
+  - https://www.wappalyzer.com/docs/api/v2/lookup/
+  - https://www.wappalyzer.com/openapi/v2-public.yaml
+description: >-
+  Cross-cutting request/response semantics for the Wappalyzer v2 REST API, read from the
+  provider's own docs and its published OpenAPI 3.1 contract. Wappalyzer states the API
+  "conforms to REST principles, returns JSON data, requires authentication, is metered and
+  rate-limited, and is HTTPS only."
+
+base_url: https://api.wappalyzer.com/v2
+transport:
+  https_only: true
+  content_type: application/json
+
+authentication:
+  style: api-key
+  header: x-api-key
+  scheme_name: ApiKeyAuth
+  applied: globally (root-level security in the published spec)
+  oauth: false
+  note: >-
+    The REST API uses a single account-scoped API key with no scopes and no expiry semantics.
+    OAuth exists only on the hosted MCP server (mcp.wappalyzer.com), a separate surface — see
+    mcp/wappalyzer-mcp.yml and well-known/wappalyzer-oauth-authorization-server.json.
+  see: authentication/wappalyzer-authentication.yml
+
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    Wappalyzer documents no idempotency key and the published OpenAPI declares no
+    Idempotency-Key parameter on any operation. Of nine documented operations, seven are GET
+    (naturally idempotent). The two that are not — POST /lists (createLeadList) and
+    POST /lists/{id} (finalizeLeadList) — are credit-spending writes with no replay-safety
+    contract, so a retried createLeadList after a timeout can create a duplicate list and
+    a retried finalizeLeadList can double-spend credits. DELETE /lists/{id} is idempotent by
+    HTTP semantics. Recorded as absent; no Idempotency pointer is emitted.
+  risk_operations: [createLeadList, finalizeLeadList]
+
+pagination:
+  supported: partial
+  style: cursor
+  applies_to: [lookupSubdomains]
+  parameters:
+    - name: limit
+      in: query
+      default: 100
+      minimum: 10
+      maximum: 1000
+      constraint: must be a multiple of 10
+    - name: after
+      in: query
+      description: Opaque cursor; pass the last key from the previous page to continue.
+  note: >-
+    Only the subdomains endpoint paginates. /lists returns an unpaginated array, and /lookup is
+    bounded by the ten-URL-per-request cap rather than paged.
+
+batching:
+  supported: true
+  applies_to: [lookupWebsites]
+  parameter: urls
+  limit: 10
+  style: comma-separated query parameter
+  response: >-
+    An array of per-URL items. Items may independently be LookupCompleted, LookupPending or
+    LookupError inside a single HTTP 200 — see errors/wappalyzer-problem-types.yml.
+
+field_selection:
+  supported: true
+  parameter: sets
+  style: comma-separated allowlist of named field sets
+  values:
+    - locale
+    - email
+    - phone
+    - contact
+    - social
+    - meta
+    - security
+    - trackers
+    - company
+    - keywords
+    - signals
+    - createdAt
+    - events
+    - all
+  note: >-
+    `sets` widens the response rather than narrowing it — the sparse default is the base result
+    and each set adds columns. The `signals` set adds technologySpend and trafficLevel. Values
+    are enumerated from the published spec and the vendor's open-source MCP server allowlist
+    (lib/constants.js), which agree.
+
+freshness_controls:
+  description: Wappalyzer serves cached technographic data by default; these parameters control staleness.
+  parameters:
+    - {name: live, default: false, description: Query the site in real time instead of the cached dataset.}
+    - {name: recursive, default: true, description: Index multiple pages by following internal links. Forces asynchronous completion.}
+    - {name: denoise, default: true, description: Exclude low-confidence detections.}
+    - {name: min_age, default: 0, description: Return results verified at least X months ago.}
+    - {name: max_age, default: 2, description: Return results verified within the last X months.}
+    - {name: squash, default: true, description: Merge monthly results into a single set.}
+  note: >-
+    An agent must set these deliberately. The defaults return cached data up to two months old,
+    which is correct for prospecting and wrong for "what is this site running right now".
+
+asynchrony:
+  supported: true
+  trigger: live=true with recursive=true and no cached record
+  duration: up to 15 minutes
+  delivery: callback POST to callback_url, or polling
+  polling_guidance: 'Re-query up to three times, five minutes apart (provider recommendation).'
+  see: asyncapi/wappalyzer-webhooks.yml
+
+metering:
+  model: credits
+  response_headers:
+    - {name: wappalyzer-credits-spent, description: Number of credits deducted by the request.}
+    - {name: wappalyzer-credits-remaining, description: Remaining credit balance after the request completes.}
+  balance_endpoint: GET https://api.wappalyzer.com/v2/credits/balance/
+  costs:
+    - {operation: Standard cached lookup, credits: 1, unit: per URL}
+    - {operation: live=true with recursive=true, credits: 5, unit: per URL}
+  note: >-
+    Credit headers are on every successful response and are the runtime budget signal an agent
+    should read — there is no separate quota header.
+
+rate_limit_signaling:
+  status_on_exhaustion: 429
+  headers_published: false
+  retry_after: not documented
+  note: >-
+    The docs state the API is "metered and rate-limited" but publish no numeric limit and no
+    RateLimit-*/X-RateLimit-* headers. The only live budget signal is the credit header pair.
+  see: rate-limits/wappalyzer-rate-limits.yml
+
+versioning:
+  scheme: uri-path
+  current: v2
+  base: https://api.wappalyzer.com/v2
+  spec_version_published: OpenAPI 3.1.0
+  deprecation_policy: not published
+  sunset_header: not documented
+  see: lifecycle/wappalyzer-lifecycle.yml
+
+error_envelope:
+  format: bespoke
+  shape: '{"url": "...", "errors": ["..."]}'
+  rfc9457: false
+  see: errors/wappalyzer-problem-types.yml
+
+request_tracing:
+  request_id_header: null
+  note: >-
+    No request-id or correlation header is documented or declared in the spec. Responses from
+    api.wappalyzer.com do carry AWS API Gateway x-amzn-requestid / x-amzn-trace-id headers
+    (observed 2026-08-14), but Wappalyzer does not document them as a support contract.
+
+callback_security:
+  header: wappalyzer-signature
+  algorithm: sha256(secret + rawBody)
+  optional: true
+  see: asyncapi/wappalyzer-webhooks.yml
+
+identifiers:
+  - {entity: Lead list, field: id, prefix: 'lst_', pattern: '^lst_'}
+  - {entity: Technology, field: slug, format: lowercase-hyphenated}
+  - {entity: Category, field: slug, format: lowercase-hyphenated}
+  - {entity: Category, field: id, format: integer}
+
+summary:
+  idempotency: false
+  pagination: cursor (subdomains only)
+  field_selection: true
+  batching: true (10 URLs)
+  webhooks: true (2 callbacks, optionally signed)
+  rate_limit_headers: false
+  credit_headers: true
+  request_id: false
+  rfc9457: false

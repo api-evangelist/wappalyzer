@@ -1,0 +1,1258 @@
+{
+  "item": [
+    {
+      "id": "74cc5d5f-b7a5-403d-b73e-3f9a70f54a18",
+      "name": "Lists",
+      "description": {
+        "content": "Lead list creation, pricing, and download lifecycle.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4a54a56d-e4e6-4e73-9d23-b275609e0e61",
+          "name": "List created lead lists",
+          "request": {
+            "name": "List created lead lists",
+            "description": {},
+            "url": {
+              "path": [
+                "lists"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "77332494-5702-4b97-96d9-0be0eec53593",
+              "name": "Lead lists returned successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"lst_\",\n    \"status\": \"Calculating\",\n    \"createdAt\": 9077,\n    \"totalCredits\": 5463,\n    \"technologies\": [\n      {\n        \"slug\": \"string\",\n        \"name\": \"string\",\n        \"operator\": \">=\",\n        \"version\": \"string\",\n        \"categories\": [\n          {\n            \"slug\": \"string\",\n            \"name\": \"string\",\n            \"id\": 1443\n          },\n          {\n            \"slug\": \"string\",\n            \"name\": \"string\",\n            \"id\": 1744\n          }\n        ]\n      },\n      {\n        \"slug\": \"string\",\n        \"name\": \"string\",\n        \"operator\": \"=\",\n        \"version\": \"string\",\n        \"categories\": [\n          {\n            \"slug\": \"string\",\n            \"name\": \"string\",\n            \"id\": 2058\n          },\n          {\n            \"slug\": \"string\",\n            \"name\": \"string\",\n            \"id\": 6427\n          }\n        ]\n      }\n    ],\n    \"keywords\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rows\": 612\n  },\n  {\n    \"id\": \"lst_\",\n    \"status\": \"Failed\",\n    \"createdAt\": 5788,\n    \"totalCredits\": 65,\n    \"technologies\": [\n      {\n        \"slug\": \"string\",\n        \"name\": \"string\",\n        \"operator\": \"=\",\n        \"version\": \"string\",\n        \"categories\": [\n          {\n            \"slug\": \"string\",\n            \"name\": \"string\",\n            \"id\": 2597\n          },\n          {\n            \"slug\": \"string\",\n            \"name\": \"string\",\n            \"id\": 293\n          }\n        ]\n      },\n      {\n        \"slug\": \"string\",\n        \"name\": \"string\",\n        \"operator\": \"=\",\n        \"version\": \"string\",\n        \"categories\": [\n          {\n            \"slug\": \"string\",\n            \"name\": \"string\",\n            \"id\": 427\n          },\n          {\n            \"slug\": \"string\",\n            \"name\": \"string\",\n            \"id\": 317\n          }\n        ]\n      }\n    ],\n    \"keywords\": [\n      \"string\",\n      \"string\"\n    ],\n    \"rows\": 8957\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a20ea413-d132-4ddb-812c-325d78e1feb1",
+              "name": "The request payload or query string was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bfa8e920-1530-415b-a2df-4d332da76a19",
+              "name": "Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c1c6725e-e704-4e90-8618-019c3f15759b",
+              "name": "Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "39a50c86-23e3-445f-8ebf-1da5cb7db38e",
+          "name": "Create a lead list",
+          "request": {
+            "name": "Create a lead list",
+            "description": {},
+            "url": {
+              "path": [
+                "lists"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categories\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"technologies\": [\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    }\n  ],\n  \"keywords\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"languages\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"countries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"industries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companySizes\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"tlds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"matchCountryLanguage\": \"<boolean>\",\n  \"matchTechnologies\": \"<string>\",\n  \"subset\": \"<integer>\",\n  \"subsetSlice\": \"<integer>\",\n  \"minAge\": \"<integer>\",\n  \"maxAge\": \"<integer>\",\n  \"fromDate\": \"<integer>\",\n  \"requiredSets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"excludeNoTraffic\": \"<boolean>\",\n  \"excludeMultilingual\": \"<boolean>\",\n  \"sets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"callbackUrl\": \"<uri>\",\n  \"format\": \"<string>\",\n  \"baseListId\": \"<string>\",\n  \"excludeListId\": \"<string>\",\n  \"rootPath\": \"<boolean>\",\n  \"subdomains\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0df219e0-d7bd-4638-81dd-fbc7948a8756",
+              "name": "Lead list accepted for pricing and generation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"categories\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"technologies\": [\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    }\n  ],\n  \"keywords\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"languages\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"countries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"industries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companySizes\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"tlds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"matchCountryLanguage\": \"<boolean>\",\n  \"matchTechnologies\": \"<string>\",\n  \"subset\": \"<integer>\",\n  \"subsetSlice\": \"<integer>\",\n  \"minAge\": \"<integer>\",\n  \"maxAge\": \"<integer>\",\n  \"fromDate\": \"<integer>\",\n  \"requiredSets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"excludeNoTraffic\": \"<boolean>\",\n  \"excludeMultilingual\": \"<boolean>\",\n  \"sets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"callbackUrl\": \"<uri>\",\n  \"format\": \"<string>\",\n  \"baseListId\": \"<string>\",\n  \"excludeListId\": \"<string>\",\n  \"rootPath\": \"<boolean>\",\n  \"subdomains\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of credits deducted by the request.",
+                  "key": "wappalyzer-credits-spent",
+                  "value": "4913"
+                },
+                {
+                  "disabled": false,
+                  "description": "Remaining credit balance after the request completes.",
+                  "key": "wappalyzer-credits-remaining",
+                  "value": "4913"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"lst_\",\n  \"status\": \"Calculating\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "393a244a-3ac2-47fc-8401-11cb4c92d6df",
+              "name": "The request payload or query string was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"categories\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"technologies\": [\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    }\n  ],\n  \"keywords\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"languages\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"countries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"industries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companySizes\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"tlds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"matchCountryLanguage\": \"<boolean>\",\n  \"matchTechnologies\": \"<string>\",\n  \"subset\": \"<integer>\",\n  \"subsetSlice\": \"<integer>\",\n  \"minAge\": \"<integer>\",\n  \"maxAge\": \"<integer>\",\n  \"fromDate\": \"<integer>\",\n  \"requiredSets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"excludeNoTraffic\": \"<boolean>\",\n  \"excludeMultilingual\": \"<boolean>\",\n  \"sets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"callbackUrl\": \"<uri>\",\n  \"format\": \"<string>\",\n  \"baseListId\": \"<string>\",\n  \"excludeListId\": \"<string>\",\n  \"rootPath\": \"<boolean>\",\n  \"subdomains\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6313c085-4e49-4008-9a56-427e8fe5b3fd",
+              "name": "Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"categories\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"technologies\": [\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    }\n  ],\n  \"keywords\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"languages\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"countries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"industries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companySizes\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"tlds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"matchCountryLanguage\": \"<boolean>\",\n  \"matchTechnologies\": \"<string>\",\n  \"subset\": \"<integer>\",\n  \"subsetSlice\": \"<integer>\",\n  \"minAge\": \"<integer>\",\n  \"maxAge\": \"<integer>\",\n  \"fromDate\": \"<integer>\",\n  \"requiredSets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"excludeNoTraffic\": \"<boolean>\",\n  \"excludeMultilingual\": \"<boolean>\",\n  \"sets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"callbackUrl\": \"<uri>\",\n  \"format\": \"<string>\",\n  \"baseListId\": \"<string>\",\n  \"excludeListId\": \"<string>\",\n  \"rootPath\": \"<boolean>\",\n  \"subdomains\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a743dd17-3bfe-4888-8599-5984a43a1901",
+              "name": "Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"categories\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"technologies\": [\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    {\n      \"slug\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"version\": \"<string>\"\n    }\n  ],\n  \"keywords\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"languages\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"countries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"industries\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"companySizes\": [\n    \"<integer>\",\n    \"<integer>\"\n  ],\n  \"tlds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"matchCountryLanguage\": \"<boolean>\",\n  \"matchTechnologies\": \"<string>\",\n  \"subset\": \"<integer>\",\n  \"subsetSlice\": \"<integer>\",\n  \"minAge\": \"<integer>\",\n  \"maxAge\": \"<integer>\",\n  \"fromDate\": \"<integer>\",\n  \"requiredSets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"excludeNoTraffic\": \"<boolean>\",\n  \"excludeMultilingual\": \"<boolean>\",\n  \"sets\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"callbackUrl\": \"<uri>\",\n  \"format\": \"<string>\",\n  \"baseListId\": \"<string>\",\n  \"excludeListId\": \"<string>\",\n  \"rootPath\": \"<boolean>\",\n  \"subdomains\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7bf9b8c9-50a1-40d8-a599-40a54d824966",
+          "name": "Fetch a lead list",
+          "request": {
+            "name": "Fetch a lead list",
+            "description": {},
+            "url": {
+              "path": [
+                "lists",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique list identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a9cab3c0-d4a4-4a44-bfcb-4f708a67b96b",
+              "name": "Lead list returned successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"lst_\",\n  \"status\": \"Ready\",\n  \"createdAt\": 8570,\n  \"technologies\": [\n    {\n      \"slug\": \"string\",\n      \"name\": \"string\",\n      \"operator\": \"=\",\n      \"version\": \"string\",\n      \"categories\": [\n        {\n          \"slug\": \"string\",\n          \"name\": \"string\",\n          \"id\": 302\n        },\n        {\n          \"slug\": \"string\",\n          \"name\": \"string\",\n          \"id\": 6584\n        }\n      ]\n    },\n    {\n      \"slug\": \"string\",\n      \"name\": \"string\",\n      \"operator\": \">=\",\n      \"version\": \"string\",\n      \"categories\": [\n        {\n          \"slug\": \"string\",\n          \"name\": \"string\",\n          \"id\": 8589\n        },\n        {\n          \"slug\": \"string\",\n          \"name\": \"string\",\n          \"id\": 1277\n        }\n      ]\n    }\n  ],\n  \"keywords\": [\n    \"string\",\n    \"string\"\n  ],\n  \"languages\": [\n    \"string\",\n    \"string\"\n  ],\n  \"countries\": [\n    \"string\",\n    \"string\"\n  ],\n  \"industries\": [\n    \"string\",\n    \"string\"\n  ],\n  \"companySizes\": [\n    5161,\n    2561\n  ],\n  \"tlds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"matchCountryLanguage\": false,\n  \"matchTechnologies\": \"and\",\n  \"subset\": 3900,\n  \"subsetSlice\": 1727,\n  \"minAge\": 9592,\n  \"maxAge\": 5158,\n  \"fromDate\": 3210,\n  \"requiredSets\": [\n    \"string\",\n    \"string\"\n  ],\n  \"excludeNoTraffic\": true,\n  \"excludeMultilingual\": false,\n  \"sets\": [\n    \"string\",\n    \"string\"\n  ],\n  \"callbackUrl\": \"https://lUFmieXPwpEx.pwqAAg39Q,EjNvT-s1QFuekerSzMQjSzTzA2UBLLqAREiQRXOeOlO0iHzbkSYZb,8S\",\n  \"totalCredits\": 7764,\n  \"url\": \"http://egxbclTCBYPj.wmgP0VQsYrWMXNvKQyTVMzUswJX3LI0EHzp-iHi-Suh8.nucojtgwlzxnBgat4\",\n  \"sampleUrl\": \"http://JPmiOgawNBZtTMvEDiQWPYhkdWiEyP.tumsqzetu,vxvSkkozgfTmquFz5y5+fu0iMesP1Fjs1frmVQEkbsktJlfCK6sV5V\",\n  \"rows\": {\n    \"key_0\": 754,\n    \"key_1\": 4108,\n    \"key_2\": 5452,\n    \"key_3\": 2623\n  },\n  \"setRows\": {\n    \"key_0\": 8515\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46453ae8-3145-4621-adef-2363848aa239",
+              "name": "The request payload or query string was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ff272fb0-3eb7-43d0-9f77-fd9ae2f9167d",
+              "name": "Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "01a5fd9a-9a0b-4c57-95fe-d8ea1696b8ea",
+              "name": "Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f140aea9-a257-45a5-883b-f162bfc247af",
+          "name": "Spend credits and finalize a ready lead list",
+          "request": {
+            "name": "Spend credits and finalize a ready lead list",
+            "description": {},
+            "url": {
+              "path": [
+                "lists",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique list identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"spendCredits\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1d5d8db8-c099-4f33-b542-3afe6013114a",
+              "name": "Lead list finalized successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendCredits\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of credits deducted by the request.",
+                  "key": "wappalyzer-credits-spent",
+                  "value": "4913"
+                },
+                {
+                  "disabled": false,
+                  "description": "Remaining credit balance after the request completes.",
+                  "key": "wappalyzer-credits-remaining",
+                  "value": "4913"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"lst_\",\n  \"status\": \"Complete\",\n  \"url\": \"https://gbAWRhbuixWakUTKXuCVG.fpxCJ9uIH.pzoVR+oRzNnI9L\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff9a74d9-3318-4a06-a6a4-efd8d17f1bb3",
+              "name": "The request payload or query string was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendCredits\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e470d01a-e9cf-4c9f-9440-d7cb14f6eb7a",
+              "name": "Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendCredits\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d6c9ad30-418e-4288-9772-3fbc29dab3ab",
+              "name": "Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spendCredits\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba1ad468-7020-4448-b883-777e9c3d69f7",
+          "name": "Delete a lead list",
+          "request": {
+            "name": "Delete a lead list",
+            "description": {},
+            "url": {
+              "path": [
+                "lists",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Unique list identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "52659d28-45b3-4177-8a64-baba6c43fd60",
+              "name": "Lead list deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "92786a79-8a9c-4745-a6b9-eb3461061461",
+              "name": "The request payload or query string was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "99872d94-2d08-423e-938e-a26237468fa8",
+              "name": "Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "070f2fc3-f86a-4830-ba17-3f00b9d0d26d",
+              "name": "Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lists",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Unique list identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.wappalyzer.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cc1f1e65-da04-4099-bd6f-c4cd1877fcb5",
+    "name": "Wappalyzer Public Basics Lists API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OpenAPI 3.0 contract for Wappalyzer's documented public REST endpoints.\nCovers credit balance, technology lookup, lead lists, subdomain discovery,\nand email verification.\n\n\nContact Support:\n Name: Wappalyzer Support",
+      "type": "text/plain"
+    }
+  }
+}

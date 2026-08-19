@@ -1,0 +1,109 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.wappalyzer.com/docs/api/v2/basics/
+sources:
+  - https://www.wappalyzer.com/docs/api/v2/basics/
+  - https://www.wappalyzer.com/openapi/v2-public.yaml
+  - https://status.wappalyzer.com/
+description: >-
+  Wappalyzer runs a URI-path-versioned v2 API and operates a public status page, but publishes no
+  changelog, no deprecation policy, no sunset-header contract, no roadmap and no SLA. Contract
+  change is therefore invisible to consumers except by re-fetching the OpenAPI document.
+
+versioning:
+  scheme: uri-path
+  current: v2
+  base: https://api.wappalyzer.com/v2
+  previous_versions_documented: false
+  docs: https://www.wappalyzer.com/docs/api/v2/basics/
+  spec:
+    published: true
+    url: https://www.wappalyzer.com/openapi/v2-public.yaml
+    version: OpenAPI 3.1.0
+    info_version: v2
+    note: >-
+      The spec's info.version is the API version string "v2", not a dated or semantic release
+      identifier, so two fetches of the document cannot be ordered. The spec description calls
+      itself "this initial spec", which is the only evolution signal published.
+
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  note: >-
+    No deprecation policy page exists (https://www.wappalyzer.com/changelog/ and /roadmap/ both
+    return the SPA 404 shell). No operation in the published OpenAPI carries `deprecated: true`.
+    No Sunset or Deprecation response header is declared. A breaking change would reach consumers
+    unannounced.
+
+changelog:
+  published: false
+  url: null
+  note: >-
+    No dated changelog or release-notes surface was found. Probed /changelog/ (SPA 404 shell) and
+    searched the site; the only version signal is the v2 path segment.
+
+status_page:
+  url: https://status.wappalyzer.com/
+  status: 200
+  provider: UptimeRobot
+  scope: single overall service (no per-component breakdown)
+  windows: [24 hours, 7 days, 30 days, 90 days]
+  incident_feed: false
+  api: false
+  note: >-
+    Also embedded in the site chrome as a live "API status" indicator on the docs and footer.
+    No RSS/Atom feed and no status API, so incident state cannot be consumed programmatically.
+
+sla:
+  published: false
+  url: null
+  uptime_target: null
+  note: >-
+    No SLA or uptime commitment is published. /sla/ returns the SPA 404 shell. Enterprise plan
+    copy offers "dedicated support" and "custom terms", implying SLAs are negotiated privately.
+
+support:
+  channels:
+    - {kind: contact-form, url: 'https://www.wappalyzer.com/contact/'}
+    - {kind: faq, url: 'https://www.wappalyzer.com/faq/'}
+    - {kind: faq-api, url: 'https://www.wappalyzer.com/faq/api/'}
+    - {kind: email, value: 'hello@wappalyzer.com', source: 'well-known/wappalyzer-security.txt'}
+  note: No public community forum, Slack/Discord, or issue tracker for the API.
+
+roadmap:
+  published: false
+  note: /roadmap/ returns the SPA 404 shell.
+
+decay_signals:
+  - >-
+    The only registry-published first-party package (npm `wappalyzer`) was deprecated by the
+    vendor in 2023 — see packages/wappalyzer-packages.yml.
+  - >-
+    The public GitHub org contains exactly one repository (`mcp`, last pushed 2026-03-21). The
+    detection-rules repositories that made Wappalyzer well known are no longer public.
+  - >-
+    Countervailing: the MCP integration, the published OpenAPI 3.1 contract, and llms.txt /
+    llms-full.txt are recent, deliberate agent-surface investments. The API itself is being
+    actively developed even though the open-source estate is not.
+
+summary:
+  versioning_documented: true
+  changelog_published: false
+  deprecation_policy: false
+  sunset_header: false
+  status_page: true
+  sla_published: false
+  roadmap_published: false
+
+x-evidence:
+  fetched: '2026-08-14'
+  evidence:
+    - {url: 'https://status.wappalyzer.com/', http_status: 200}
+    - {url: 'https://www.wappalyzer.com/changelog/', http_status: 200, detail: 'SPA 404 shell (7748 bytes)'}
+    - {url: 'https://www.wappalyzer.com/roadmap/', http_status: 200, detail: 'SPA 404 shell (7748 bytes)'}
+    - {url: 'https://www.wappalyzer.com/sla/', http_status: 200, detail: 'SPA 404 shell (7748 bytes)'}
+    - {url: 'https://www.wappalyzer.com/openapi/v2-public.yaml', http_status: 200}

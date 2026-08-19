@@ -1,0 +1,281 @@
+openapi: 3.0.3
+info:
+  title: Wappalyzer Public Metadata API
+  version: v2
+  description: >-
+    The four anonymous, unauthenticated metadata endpoints of the Wappalyzer v2 API: the
+    technology directory, a single technology profile, the category directory, and a single
+    category with its member technologies.
+
+
+    These endpoints are not covered by the published /docs/api/v2/ reference. They were located
+    from Wappalyzer's own open-source MCP server (github.com/wappalyzer/mcp), whose README states
+    the `wappalyzer://technologies`, `wappalyzer://technologies/{slug}`, `wappalyzer://categories`
+    and `wappalyzer://categories/{slug}` MCP resources "do not send the API key" and read from
+    `GET /technologies/`, `GET /technologies/{slug}/`, `GET /categories/` and
+    `GET /categories/{slug}/`. Each path was then confirmed live and anonymous against
+    https://api.wappalyzer.com/v2 on 2026-08-14 (HTTP 200, application/json). Schemas below are
+    modelled from the observed response bodies only — no field is asserted that was not returned.
+  license:
+    name: Proprietary
+    url: https://www.wappalyzer.com/terms/
+  contact:
+    name: Wappalyzer Support
+    url: https://www.wappalyzer.com/contact/
+  x-provenance:
+    method: probed
+    generated: '2026-08-14'
+    discovered_from: https://github.com/wappalyzer/mcp
+    verified:
+      - {url: 'https://api.wappalyzer.com/v2/technologies/', status: 200, bytes: 1362448, items: 7281}
+      - {url: 'https://api.wappalyzer.com/v2/technologies/shopify/', status: 200, bytes: 6280}
+      - {url: 'https://api.wappalyzer.com/v2/categories/', status: 200, bytes: 14476, items: 106}
+      - {url: 'https://api.wappalyzer.com/v2/categories/ecommerce/', status: 200}
+servers:
+  - url: https://api.wappalyzer.com/v2
+security: []
+tags:
+  - name: Metadata
+    description: Anonymous technology and category reference data.
+paths:
+  /technologies/:
+    get:
+      tags: [Metadata]
+      operationId: listTechnologies
+      summary: List every technology in the Wappalyzer directory
+      description: >-
+        Returns the full technology directory as a flat array. Observed 7,281 entries on
+        2026-08-14. No authentication is required and no credits are consumed.
+      responses:
+        '200':
+          description: The technology directory.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TechnologySummary'
+              example:
+                - slug: 11sight
+                  name: 11Sight
+                  icon: 11Sight.svg
+                  categories:
+                    - {id: 52, slug: live-chat, name: Live chat, priority: 9}
+                    - {id: 53, slug: crm, name: CRM, priority: 5}
+                  versioned: false
+                  hostnames: 38
+  /technologies/{slug}/:
+    get:
+      tags: [Metadata]
+      operationId: getTechnology
+      summary: Get a single technology profile
+      description: >-
+        Returns the full profile for one technology: categories, vendor website, description,
+        pricing metadata, SaaS/OSS flags, adoption counts, top countries, top languages and
+        alternatives.
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          description: Technology slug, as returned by listTechnologies.
+          schema:
+            type: string
+          example: shopify
+      responses:
+        '200':
+          description: The technology profile.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Technology'
+        '404':
+          description: No technology with that slug.
+  /categories/:
+    get:
+      tags: [Metadata]
+      operationId: listCategories
+      summary: List every technology category
+      description: >-
+        Returns the full category directory as a flat array. Observed 106 entries on 2026-08-14.
+      responses:
+        '200':
+          description: The category directory.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+              example:
+                - id: 74
+                  slug: a-b-testing
+                  technologiesCount: 57
+                  name: A/B Testing
+                  groups:
+                    - {name: Analytics, slug: analytics}
+  /categories/{slug}/:
+    get:
+      tags: [Metadata]
+      operationId: getCategory
+      summary: Get a single category and its member technologies
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          description: Category slug, as returned by listCategories.
+          schema:
+            type: string
+          example: ecommerce
+      responses:
+        '200':
+          description: The category, its groups, and a map of member technologies keyed by slug.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryDetail'
+        '404':
+          description: No category with that slug.
+components:
+  schemas:
+    CategoryRef:
+      type: object
+      description: A category reference embedded on a technology.
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+        priority:
+          type: integer
+    Group:
+      type: object
+      description: The high-level grouping a category belongs to.
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+    TechnologySummary:
+      type: object
+      description: A technology as returned in the directory listing.
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        icon:
+          type: string
+          description: Icon file name.
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryRef'
+        versioned:
+          type: boolean
+          description: Whether Wappalyzer can detect a version for this technology.
+        hostnames:
+          type: integer
+          description: Number of hostnames observed running this technology.
+    Technology:
+      allOf:
+        - $ref: '#/components/schemas/TechnologySummary'
+        - type: object
+          properties:
+            website:
+              type: string
+              format: uri
+            description:
+              type: string
+            pricing:
+              type: array
+              description: Pricing metadata tags, e.g. low, mid, high, freemium, recurring, onetime, poa.
+              items:
+                type: string
+            saas:
+              type: boolean
+            oss:
+              type: boolean
+            createdAt:
+              type: integer
+              description: Unix epoch seconds.
+            hits:
+              type: integer
+            topIpCountries:
+              type: object
+              description: Map of ISO country code to observation count.
+              additionalProperties:
+                type: integer
+            topLanguages:
+              type: object
+              additionalProperties:
+                type: integer
+            topIndustries:
+              type: object
+              additionalProperties:
+                type: integer
+            topCompanySizes:
+              type: object
+              additionalProperties:
+                type: integer
+            topHostnames:
+              type: object
+              additionalProperties:
+                type: object
+                properties:
+                  hits:
+                    type: integer
+                  www:
+                    type: boolean
+            alternatives:
+              type: array
+              items:
+                type: object
+                properties:
+                  slug:
+                    type: string
+                  categorySlug:
+                    type: string
+                  categoryName:
+                    type: string
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+        technologiesCount:
+          type: integer
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+    CategoryDetail:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        technologies:
+          type: object
+          description: Member technologies keyed by slug.
+          additionalProperties:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              icon:
+                type: string
+              hits:
+                type: integer
+              hostnames:
+                type: integer

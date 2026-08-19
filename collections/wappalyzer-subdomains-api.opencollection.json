@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wappalyzer Public Basics Subdomains API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Subdomains",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Discover website-serving subdomains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wappalyzer.com/v2/subdomains",
+            "params": [
+              {
+                "name": "domains",
+                "value": "",
+                "type": "query",
+                "description": "Between one and ten domain names, comma separated."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of subdomains to return. Must be a multiple of 10."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Resume pagination after the previous `moreAfter` value."
+              }
+            ]
+          },
+          "docs": "Discover website-serving subdomains"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,113 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wappalyzer Public Basics Lists API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Lists",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List created lead lists",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wappalyzer.com/v2/lists"
+          },
+          "docs": "List created lead lists"
+        },
+        {
+          "info": {
+            "name": "Create a lead list",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wappalyzer.com/v2/lists",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a lead list"
+        },
+        {
+          "info": {
+            "name": "Fetch a lead list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wappalyzer.com/v2/lists/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique list identifier."
+              }
+            ]
+          },
+          "docs": "Fetch a lead list"
+        },
+        {
+          "info": {
+            "name": "Spend credits and finalize a ready lead list",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wappalyzer.com/v2/lists/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique list identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Spend credits and finalize a ready lead list"
+        },
+        {
+          "info": {
+            "name": "Delete a lead list",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.wappalyzer.com/v2/lists/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique list identifier."
+              }
+            ]
+          },
+          "docs": "Delete a lead list"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

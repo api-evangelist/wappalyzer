@@ -1,0 +1,324 @@
+{
+  "item": [
+    {
+      "id": "09e3e3b9-df81-4083-bdae-db7e467d6c04",
+      "name": "Subdomains",
+      "description": {
+        "content": "Dataset-backed website-serving subdomain discovery.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "070ae18d-068f-489d-8e5c-b6cfac2131e2",
+          "name": "Discover website-serving subdomains",
+          "request": {
+            "name": "Discover website-serving subdomains",
+            "description": {},
+            "url": {
+              "path": [
+                "subdomains"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "domains",
+                  "value": "<string>",
+                  "description": "(Required) Between one and ten domain names, comma separated."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of subdomains to return. Must be a multiple of 10."
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<string>",
+                  "description": "Resume pagination after the previous `moreAfter` value."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "55c2d1e8-4a5c-44cc-b8df-8a98e5f183b5",
+              "name": "Subdomain discovery results returned successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subdomains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "domains",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of credits deducted by the request.",
+                  "key": "wappalyzer-credits-spent",
+                  "value": "1054"
+                },
+                {
+                  "disabled": false,
+                  "description": "Remaining credit balance after the request completes.",
+                  "key": "wappalyzer-credits-remaining",
+                  "value": "1054"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"domain\": \"string\",\n    \"subdomains\": {\n      \"key_0\": {\n        \"createdAt\": 5380,\n        \"updatedAt\": 3775\n      },\n      \"key_1\": {\n        \"createdAt\": 2527,\n        \"updatedAt\": 1164\n      },\n      \"key_2\": {\n        \"createdAt\": 1349,\n        \"updatedAt\": 2883\n      }\n    },\n    \"moreAfter\": \"string\"\n  },\n  {\n    \"domain\": \"string\",\n    \"subdomains\": {\n      \"key_0\": {\n        \"createdAt\": 9671,\n        \"updatedAt\": 9125\n      }\n    },\n    \"moreAfter\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "decce965-146e-46ee-bb58-0d59cfe1d930",
+              "name": "The request payload or query string was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subdomains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "domains",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1ab48390-aaee-4da1-98e2-bff7f088205a",
+              "name": "Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subdomains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "domains",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9ba0bfac-6f41-4c4d-9755-52680e85892a",
+              "name": "Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subdomains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "domains",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.wappalyzer.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2f538535-c17b-4d5a-b435-b0614773551b",
+    "name": "Wappalyzer Public Basics Subdomains API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OpenAPI 3.0 contract for Wappalyzer's documented public REST endpoints.\nCovers credit balance, technology lookup, lead lists, subdomain discovery,\nand email verification.\n\n\nContact Support:\n Name: Wappalyzer Support",
+      "type": "text/plain"
+    }
+  }
+}

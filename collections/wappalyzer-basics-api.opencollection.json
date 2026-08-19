@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wappalyzer Public Basics API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Basics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get current credit balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wappalyzer.com/v2/credits/balance"
+          },
+          "docs": "Get current credit balance"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

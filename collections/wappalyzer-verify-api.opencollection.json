@@ -1,0 +1,45 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wappalyzer Public Basics Verify API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Verify",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Verify an email address",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wappalyzer.com/v2/verify",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "Email address to verify."
+              }
+            ]
+          },
+          "docs": "Verify an email address"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,7 +1,49 @@
 name: Wappalyzer API Rate Limits
 description: Rate limiting policies for the Wappalyzer REST API, applied per API key across all endpoint types.
-version: '0.1'
+version: '0.2'
 url: https://www.wappalyzer.com/docs/api/v2/lookup/
+generated: '2026-08-14'
+method: searched
+source: https://www.wappalyzer.com/docs/api/v2/basics/
+sources:
+  - https://www.wappalyzer.com/docs/api/v2/basics/
+  - https://www.wappalyzer.com/docs/api/v2/lookup/
+  - https://www.wappalyzer.com/openapi/v2-public.yaml
+  - https://www.wappalyzer.com/pricing/
+
+published_numeric_limit: false
+publisher_statement: >-
+  Wappalyzer states only that its endpoints "are metered and rate-limited" and publishes no
+  numeric request-rate figure and no rate-limit response headers. The runtime signal a caller
+  actually gets is the credit header pair below, plus HTTP 429 on exhaustion. The per-second
+  and per-request figures recorded under limits[] are documented request-shape constraints and
+  credit quotas, not a published requests-per-second ceiling.
+
+runtime_headers:
+  rate_limit_headers_published: false
+  retry_after: not documented
+  credit_headers:
+    - name: wappalyzer-credits-spent
+      description: Number of credits deducted by the request.
+      source: https://www.wappalyzer.com/docs/api/v2/basics/
+      declared_in_spec: true
+    - name: wappalyzer-credits-remaining
+      description: Remaining credit balance after the request completes.
+      source: https://www.wappalyzer.com/docs/api/v2/basics/
+      declared_in_spec: true
+  note: >-
+    No RateLimit-* (draft-ietf-httpapi-ratelimit-headers) and no X-RateLimit-* headers are
+    declared in the published OpenAPI 3.1 contract or documented. The credit headers are on
+    every successful response and are the only budget signal available at runtime.
+  balance_endpoint: GET https://api.wappalyzer.com/v2/credits/balance/
+
+status_codes_published:
+  - {code: 429, meaning: Rate limit exceeded, source: https://www.wappalyzer.com/docs/api/v2/basics/}
+  - {code: 403, meaning: 'Authorization failure — incorrect API key, invalid method or resource, OR insufficient credits', source: https://www.wappalyzer.com/docs/api/v2/basics/}
+correction_2026-08-14: >-
+  An earlier revision of this file recorded HTTP 402 for credit exhaustion. The provider's own
+  response-code table publishes only 200, 400, 403 and 429, and folds "insufficient credits"
+  into 403. 402 is not used. Corrected here and in errors/wappalyzer-problem-types.yml.
 
 limits:
   - name: Request Rate Limit
@@ -38,7 +80,7 @@ limits:
         limit: 20000
       - plan: Enterprise
         limit: 200000
-    enforcement: HTTP 402 or quota exhaustion error when credits depleted
+    enforcement: HTTP 403 when credits are depleted (the provider folds insufficient credits into 403; 402 is not used)
     applies_to:
       - Lookup API
       - Analyze API
@@ -76,12 +118,16 @@ creditConsumption:
 
 headers:
   authentication: x-api-key
-  rateLimitStatus: Check response headers for quota remaining information
+  creditsSpent: wappalyzer-credits-spent
+  creditsRemaining: wappalyzer-credits-remaining
+  rateLimit: none published
 
 errorCodes:
   - code: 429
-    meaning: Too Many Requests — request rate exceeded 10/s
-  - code: 402
-    meaning: Payment Required — monthly credit quota exhausted
-  - code: 401
-    meaning: Unauthorized — missing or invalid API key
+    meaning: Rate limit exceeded
+  - code: 403
+    meaning: >-
+      Authorization failure — incorrect API key, invalid method or resource, or insufficient
+      credits. All three share this status; call GET /credits/balance to disambiguate.
+  - code: 400
+    meaning: There was an error with the request

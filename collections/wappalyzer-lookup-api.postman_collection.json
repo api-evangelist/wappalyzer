@@ -1,0 +1,481 @@
+{
+  "item": [
+    {
+      "id": "663a290b-bed7-4afa-9488-e2c22a3a6faa",
+      "name": "Lookup",
+      "description": {
+        "content": "Website technology lookup and asynchronous crawl callbacks.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "de847214-49d9-4a19-bef6-d6ce7dfa5254",
+          "name": "Look up technologies and related website intelligence",
+          "request": {
+            "name": "Look up technologies and related website intelligence",
+            "description": {
+              "content": "Looks up one or more websites. The response can complete synchronously\nor return pending crawl markers when an asynchronous crawl is required.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "lookup"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "urls",
+                  "value": "<uri>",
+                  "description": "(Required) Between one and ten website URLs, comma separated. Multiple URLs are not supported with `recursive=false`."
+                },
+                {
+                  "disabled": false,
+                  "key": "live",
+                  "value": "false",
+                  "description": "Scan websites in real time instead of relying on cached results when needed."
+                },
+                {
+                  "disabled": false,
+                  "key": "recursive",
+                  "value": "true",
+                  "description": "Follow internal links for increased coverage. Asynchronous when true and a crawl is required."
+                },
+                {
+                  "disabled": false,
+                  "key": "callback_url",
+                  "value": "<uri>",
+                  "description": "Public callback URL that receives asynchronous lookup results."
+                },
+                {
+                  "disabled": false,
+                  "key": "debug_email",
+                  "value": "<email>",
+                  "description": "Debug-only email address that receives callback troubleshooting information."
+                },
+                {
+                  "disabled": false,
+                  "key": "sets",
+                  "value": "<string>,<string>",
+                  "description": "Comma-separated list of additional result field sets to include. Use `signals` to request `technologySpend` and `trafficLevel`."
+                },
+                {
+                  "disabled": false,
+                  "key": "denoise",
+                  "value": "true",
+                  "description": "Exclude low-confidence detections."
+                },
+                {
+                  "disabled": false,
+                  "key": "min_age",
+                  "value": "<integer>",
+                  "description": "Return results verified at least this many months ago."
+                },
+                {
+                  "disabled": false,
+                  "key": "max_age",
+                  "value": "2",
+                  "description": "Return results verified within the last `max_age` months."
+                },
+                {
+                  "disabled": false,
+                  "key": "squash",
+                  "value": "true",
+                  "description": "Merge monthly results into a single result set."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5f6895d5-72fc-45ee-b0a1-40b1b8fd2ef8",
+              "name": "Lookup completed or crawl accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lookup"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "urls",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "live",
+                      "value": "false"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "true"
+                    },
+                    {
+                      "key": "callback_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "debug_email",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "sets",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "denoise",
+                      "value": "true"
+                    },
+                    {
+                      "key": "min_age",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "max_age",
+                      "value": "2"
+                    },
+                    {
+                      "key": "squash",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Number of credits deducted by the request.",
+                  "key": "wappalyzer-credits-spent",
+                  "value": "7144"
+                },
+                {
+                  "disabled": false,
+                  "description": "Remaining credit balance after the request completes.",
+                  "key": "wappalyzer-credits-remaining",
+                  "value": "7144"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"url\": \"http://XyNKPJQyysinCFLYQn.qhgoztjCFmPkaf\",\n    \"technologies\": [\n      {\n        \"slug\": \"string\",\n        \"name\": \"string\",\n        \"cpe\": \"string\",\n        \"versions\": [\n          \"string\",\n          \"string\"\n        ],\n        \"categories\": [\n          {\n            \"slug\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"slug\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"trafficRank\": 9150,\n        \"confirmedAt\": 9094\n      },\n      {\n        \"slug\": \"string\",\n        \"name\": \"string\",\n        \"cpe\": \"string\",\n        \"versions\": [\n          \"string\",\n          \"string\"\n        ],\n        \"categories\": [\n          {\n            \"slug\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"slug\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"trafficRank\": 1868,\n        \"confirmedAt\": 6211\n      }\n    ],\n    \"technologySpend\": \"Medium\",\n    \"trafficLevel\": \"Medium\"\n  },\n  {\n    \"url\": \"https://hf.gvogfzkpqi8AIc3GaQLauaWtN8HESrmcD0vXoVC3y1YDb\",\n    \"technologies\": [\n      {\n        \"slug\": \"string\",\n        \"name\": \"string\",\n        \"cpe\": \"string\",\n        \"versions\": [\n          \"string\",\n          \"string\"\n        ],\n        \"categories\": [\n          {\n            \"slug\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"slug\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"trafficRank\": 2448,\n        \"confirmedAt\": 132\n      },\n      {\n        \"slug\": \"string\",\n        \"name\": \"string\",\n        \"cpe\": \"string\",\n        \"versions\": [\n          \"string\",\n          \"string\"\n        ],\n        \"categories\": [\n          {\n            \"slug\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"slug\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"trafficRank\": 9554,\n        \"confirmedAt\": 904\n      }\n    ],\n    \"technologySpend\": \"Very high\",\n    \"trafficLevel\": \"Very high\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e5323b9c-447e-430b-b3f7-f64e1ca1967d",
+              "name": "The request payload or query string was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lookup"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "urls",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "live",
+                      "value": "false"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "true"
+                    },
+                    {
+                      "key": "callback_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "debug_email",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "sets",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "denoise",
+                      "value": "true"
+                    },
+                    {
+                      "key": "min_age",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "max_age",
+                      "value": "2"
+                    },
+                    {
+                      "key": "squash",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e09d7ef9-0529-475b-b771-8333f63505fe",
+              "name": "Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lookup"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "urls",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "live",
+                      "value": "false"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "true"
+                    },
+                    {
+                      "key": "callback_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "debug_email",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "sets",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "denoise",
+                      "value": "true"
+                    },
+                    {
+                      "key": "min_age",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "max_age",
+                      "value": "2"
+                    },
+                    {
+                      "key": "squash",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5fccb0c6-2cae-44c7-86f8-5ed5fe0eecfd",
+              "name": "Rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "lookup"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "urls",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "live",
+                      "value": "false"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "true"
+                    },
+                    {
+                      "key": "callback_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "key": "debug_email",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "sets",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "denoise",
+                      "value": "true"
+                    },
+                    {
+                      "key": "min_age",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "max_age",
+                      "value": "2"
+                    },
+                    {
+                      "key": "squash",
+                      "value": "true"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.wappalyzer.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0c4cada0-be02-44ce-b802-310c81014c7c",
+    "name": "Wappalyzer Public Basics Lookup API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OpenAPI 3.0 contract for Wappalyzer's documented public REST endpoints.\nCovers credit balance, technology lookup, lead lists, subdomain discovery,\nand email verification.\n\n\nContact Support:\n Name: Wappalyzer Support",
+      "type": "text/plain"
+    }
+  }
+}

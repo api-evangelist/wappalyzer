@@ -1,0 +1,135 @@
+generated: '2026-08-14'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, rubygems.org, crates.io, api.nuget.org, repo.packagist.org,
+  proxy.golang.org, repo1.maven.org, api.github.com/orgs/wappalyzer
+description: >-
+  Wappalyzer publishes no current, maintained first-party client SDK for its v2 REST API. The one
+  package the company itself owns on any registry — the npm `wappalyzer` module — was deprecated
+  by the vendor in 2023 with a description that redirects users to the API. The only actively
+  maintained first-party code artifact is the open-source MCP server, which is not published to
+  any registry and installs from a git clone. Every other registry entry under the name
+  "wappalyzer" is a third-party reimplementation and is recorded here as unofficial so it is not
+  mistaken for vendor support.
+
+packages:
+  - language: javascript
+    registry: npm
+    name: wappalyzer
+    url: https://www.npmjs.com/package/wappalyzer
+    install: npm install wappalyzer
+    official: true
+    deprecated: true
+    version: 7.0.3
+    published: '2023-08-23'
+    repository: null
+    note: >-
+      First-party (npm maintainer account `wappalyzer`, homepage www.wappalyzer.com). The package
+      description now reads verbatim: "This package is no longer being maintained. Please use the
+      API at wappalyzer.com/api instead." 217 versions published between 2015-01-04 and
+      2023-08-23; nothing since. This was the self-hosted detection engine, not a client for the
+      v2 REST API — so there is no first-party SDK for the API this repo profiles. Last release
+      predates the v2 API surface documented at /docs/api/v2/.
+
+  - language: javascript
+    registry: github
+    name: wappalyzer-mcp
+    url: https://github.com/wappalyzer/mcp
+    install: git clone https://github.com/wappalyzer/mcp && npm install
+    official: true
+    version: 0.1.0
+    published: null
+    license: MIT
+    note: >-
+      First-party local stdio MCP server wrapping the v2 REST API. Version read from
+      package.json in the repo (master). `published: null` because it is NOT on any registry —
+      package.json carries "private": true, and registry.npmjs.org returns 404 for both
+      `wappalyzer-mcp` and `@wappalyzer/mcp`, so there is no registry metadata endpoint to date
+      it. Requires Node.js >= 20 and a WAPPALYZER_API_KEY environment variable. Repository last
+      pushed 2026-03-21. This is the closest thing Wappalyzer ships to a maintained client
+      library, and it is distributed only as source.
+
+  - language: python
+    registry: pypi
+    name: wappalyzer
+    url: https://pypi.org/project/wappalyzer/
+    install: pip install wappalyzer
+    official: false
+    version: 2.0.2
+    published: '2026-07-11'
+    repository: https://github.com/s0md3v/wappalyzer-next
+    note: >-
+      NOT first-party. Authored by Somdev Sangwan (s0md3v); an independent reimplementation of
+      technology fingerprinting, not a client for the Wappalyzer API. Recorded to prevent it
+      being read as vendor-published.
+
+  - language: ruby
+    registry: rubygems
+    name: wappalyzer
+    url: https://rubygems.org/gems/wappalyzer
+    install: gem install wappalyzer
+    official: false
+    version: 0.1.3
+    published: '2021-03-23'
+    repository: https://github.com/pulkit21/wappalyzer
+    note: NOT first-party. Community gem by pulkit21; no releases since 2021.
+
+  - language: rust
+    registry: crates.io
+    name: wappalyzer
+    url: https://crates.io/crates/wappalyzer
+    install: cargo add wappalyzer
+    official: false
+    version: 0.1.0
+    published: '2020-01-14'
+    repository: null
+    note: NOT first-party. Single 0.1.0 release, no repository declared, abandoned since 2020.
+
+distributions:
+  - kind: browser-extension
+    name: Wappalyzer - Technology profiler
+    official: true
+    url: https://chromewebstore.google.com/detail/wappalyzer-technology-pro/gppongmhjkpfnbhagpmjfkannfbllamg
+    registry: chrome-web-store
+    version: null
+    published: null
+    note: >-
+      version/published null — the Chrome Web Store exposes no unauthenticated metadata endpoint
+      to read a version or release date from, and the listing URL is unpinned. Checked, nothing
+      machine-readable to record.
+  - kind: browser-extension
+    name: Wappalyzer
+    official: true
+    url: https://addons.mozilla.org/firefox/addon/wappalyzer/
+    registry: addons.mozilla.org
+    version: null
+    published: null
+    note: >-
+      AMO API responds 200 but the listing is a browser extension, not an API client library;
+      version left null rather than conflating an extension release with SDK currency.
+
+registries_checked:
+  - {registry: npm, result: found, official: true}
+  - {registry: pypi, result: found, official: false}
+  - {registry: rubygems, result: found, official: false}
+  - {registry: crates.io, result: found, official: false}
+  - {registry: nuget, result: not-found, status: 404}
+  - {registry: packagist, result: not-found, status: 404}
+  - {registry: pkg.go.dev, result: not-found, detail: proxy.golang.org returns an empty version list for github.com/wappalyzer/mcp}
+  - {registry: maven-central, result: not-found, status: 404}
+
+summary:
+  official_packages: 2
+  official_maintained_packages: 1
+  official_registry_published: 1
+  official_sdk_for_v2_api: 0
+  unofficial_packages: 3
+  decay_signal: >-
+    The only registry-published first-party package (npm wappalyzer 7.0.3) was last released
+    2023-08-23 and is explicitly deprecated by the vendor in favour of the API. There is no
+    first-party SDK for the API itself in any language.
+
+x-evidence:
+  fetched: '2026-08-14'
+  github_org_repos: 1
+  github_org_note: api.github.com/orgs/wappalyzer/repos returns exactly one public repo — `mcp`.

@@ -1,0 +1,193 @@
+generated: '2026-08-14'
+method: searched
+status: published
+source: https://www.wappalyzer.com/docs/integrations/mcp/
+sources:
+  - https://www.wappalyzer.com/docs/integrations/mcp/
+  - https://www.wappalyzer.com/llms.txt
+  - https://github.com/wappalyzer/mcp
+  - https://mcp.wappalyzer.com/.well-known/oauth-protected-resource/mcp
+
+description: >-
+  Wappalyzer ships two first-party MCP servers: a hosted remote Streamable-HTTP server at
+  https://mcp.wappalyzer.com/mcp secured with OAuth 2.1 (the API key is resolved server-side
+  from the signed-in Wappalyzer account, so no key is pasted into the client), and an
+  open-source local stdio server in github.com/wappalyzer/mcp that wraps the same v2 REST API
+  using a WAPPALYZER_API_KEY environment variable. Both expose the same three read-only tools
+  and four metadata resources.
+
+deployment:
+  mode: both
+  endpoint: https://mcp.wappalyzer.com/mcp
+  install: WAPPALYZER_API_KEY=your_api_key npx wappalyzer-mcp
+  package: https://github.com/wappalyzer/mcp
+  auth: oauth
+  verified: probed
+  note: >-
+    Remote verified by POSTing tools/list to https://mcp.wappalyzer.com/mcp on 2026-08-14 —
+    HTTP 401 with WWW-Authenticate Bearer error="invalid_token", scope="mcp:tools",
+    resource_metadata="https://mcp.wappalyzer.com/.well-known/oauth-protected-resource/mcp".
+    The live tool schemas are therefore OAuth-gated; the tool list below is taken verbatim from
+    the provider's own MCP docs and the README of its open-source stdio server, not guessed.
+    The stdio package is NOT published to npm (package.json carries "private": true;
+    registry.npmjs.org returns 404 for both wappalyzer-mcp and @wappalyzer/mcp) — it installs
+    from a git clone, so `npx wappalyzer-mcp` only resolves against a local checkout.
+
+server:
+  name: wappalyzer
+  transport: http
+  protocol: Streamable HTTP
+  url: https://mcp.wappalyzer.com/mcp
+  management_url: https://mcp.wappalyzer.com/manage
+  docs: https://www.wappalyzer.com/docs/integrations/mcp/
+  read_only: true
+  plan_requirement: Business plan or above (per provider MCP docs)
+
+local_server:
+  name: wappalyzer-mcp
+  transport: stdio
+  repository: https://github.com/wappalyzer/mcp
+  license: MIT
+  version: 0.1.0
+  published_registry: null
+  runtime: Node.js >= 20
+  entrypoint: index.js
+  env:
+    - name: WAPPALYZER_API_KEY
+      required: true
+    - name: WAPPALYZER_API_BASE_URL
+      required: false
+      default: https://api.wappalyzer.com/v2/
+    - name: WAPPALYZER_METADATA_BASE_URL
+      required: false
+      default: inherits WAPPALYZER_API_BASE_URL
+    - name: WAPPALYZER_HTTP_TIMEOUT_MS
+      required: false
+      default: '30000'
+
+auth:
+  scheme: oauth2
+  authorization_server: https://mcp.wappalyzer.com/
+  authorization_endpoint: https://mcp.wappalyzer.com/oauth/authorize
+  token_endpoint: https://mcp.wappalyzer.com/oauth/token
+  revocation_endpoint: https://mcp.wappalyzer.com/oauth/revoke
+  registration_endpoint: https://mcp.wappalyzer.com/oauth/register
+  dynamic_client_registration: true
+  pkce: [S256]
+  grant_types: [authorization_code, refresh_token]
+  scopes:
+    - name: mcp:tools
+      description: Invoke the Wappalyzer MCP tool set.
+    - name: offline_access
+      description: Issue a refresh token for long-lived client sessions.
+  source: well-known/wappalyzer-oauth-authorization-server.json
+
+tools:
+  - name: lookup_site
+    description: Look up technologies and optional enrichment data for a single URL.
+    source_operation: openapi/wappalyzer-lookup-api-openapi.yml#lookupWebsites
+    inputs:
+      - name: url
+        required: true
+        description: Exactly one absolute http/https URL.
+      - name: live
+        required: false
+        default: false
+        description: Query the site in real time instead of the cached dataset.
+      - name: sets
+        required: false
+        default: []
+        description: >-
+          Additional field sets. Allowed values: locale, email, phone, contact, social, meta,
+          security, trackers, company, keywords, signals, createdAt, events, all.
+      - name: denoise
+        required: false
+        default: true
+        description: Exclude low-confidence detections.
+      - name: max_age
+        required: false
+        default: 2
+        description: Return results verified within the last X months.
+    constraints:
+      - exactly one URL is accepted (comma-separated lists are rejected)
+      - recursive=false is always forced, so async crawl parameters are not exposed
+    returns: request echo, data, and a credits object (spent, remaining)
+
+  - name: lookup_subdomains
+    description: Discover active website-serving subdomains for a single domain.
+    source_operation: openapi/wappalyzer-subdomains-api-openapi.yml#lookupSubdomains
+    inputs:
+      - name: domain
+        required: true
+        description: Exactly one domain.
+      - name: limit
+        required: false
+        default: 100
+        description: Between 10 and 1000, and a multiple of 10.
+      - name: after
+        required: false
+        description: Cursor for pagination.
+    returns: request echo, data, and a credits object (spent, remaining)
+
+  - name: get_credit_balance
+    description: Return the remaining API balance from the credits endpoint.
+    source_operation: openapi/wappalyzer-basics-api-openapi.yml#getCreditBalance
+    inputs: []
+    returns: '{ "credits": <number> }'
+
+resources:
+  - uri: wappalyzer://technologies
+    description: Full technology directory.
+    backing_endpoint: GET https://api.wappalyzer.com/v2/technologies/
+  - uri: wappalyzer://technologies/{slug}
+    description: Single technology profile.
+    backing_endpoint: GET https://api.wappalyzer.com/v2/technologies/{slug}/
+  - uri: wappalyzer://categories
+    description: Full category directory.
+    backing_endpoint: GET https://api.wappalyzer.com/v2/categories/
+  - uri: wappalyzer://categories/{slug}
+    description: Single category with its member technologies.
+    backing_endpoint: GET https://api.wappalyzer.com/v2/categories/{slug}/
+
+resources_note: >-
+  Resource reads do not send the API key and are cached in-process for 5 minutes. The backing
+  endpoints are anonymously reachable — verified live 2026-08-14 (HTTP 200) — and are captured
+  as openapi/wappalyzer-metadata-api-openapi.yml.
+
+clients:
+  - name: Codex
+    setup: |
+      codex mcp add wappalyzer --url https://mcp.wappalyzer.com/mcp
+      codex mcp login wappalyzer
+  - name: ChatGPT Developer Mode
+    setup: Add https://mcp.wappalyzer.com/mcp as a remote MCP app and complete the OAuth flow.
+  - name: Claude Desktop (local stdio)
+    setup: |
+      {
+        "mcpServers": {
+          "wappalyzer": {
+            "command": "node",
+            "args": ["/path/to/wappalyzer/mcp/index.js"],
+            "env": { "WAPPALYZER_API_KEY": "your_api_key" }
+          }
+        }
+      }
+
+x-evidence:
+  fetched: '2026-08-14'
+  probes:
+    - url: https://mcp.wappalyzer.com/mcp
+      method: POST tools/list
+      http_status: 401
+      detail: OAuth challenge — invalid_token, Missing Authorization header, scope="mcp:tools"
+    - url: https://mcp.wappalyzer.com/.well-known/oauth-authorization-server
+      http_status: 200
+    - url: https://mcp.wappalyzer.com/.well-known/oauth-protected-resource/mcp
+      http_status: 200
+    - url: https://www.wappalyzer.com/docs/integrations/mcp/
+      http_status: 200
+    - url: https://api.github.com/repos/wappalyzer/mcp
+      http_status: 200
+    - url: https://registry.npmjs.org/wappalyzer-mcp
+      http_status: 404
+      detail: stdio server is not published to npm

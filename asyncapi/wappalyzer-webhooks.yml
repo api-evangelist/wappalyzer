@@ -1,0 +1,106 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.wappalyzer.com/openapi/v2-public.yaml
+sources:
+  - https://www.wappalyzer.com/openapi/v2-public.yaml
+  - https://www.wappalyzer.com/docs/api/v2/basics/
+  - https://www.wappalyzer.com/docs/api/v2/lookup/
+spec_type: Webhooks
+asyncapi_published: false
+description: >-
+  Wappalyzer publishes no AsyncAPI document, but it does ship a real, machine-readable event
+  surface: two OpenAPI 3.1 `callbacks` blocks in its published contract. Long-running work —
+  a recursive live crawl, and lead-list generation — completes asynchronously and Wappalyzer
+  POSTs the result to a caller-supplied URL. Payloads are optionally signed. Both callbacks are
+  consumer-registered per request (no subscription API, no event catalogue, no replay).
+
+delivery:
+  style: request-scoped callback
+  transport: HTTPS POST
+  registration: >-
+    Per request. There is no webhook subscription endpoint — the destination is supplied inline
+    as the `callback_url` query parameter (lookup) or the `callbackUrl` body field (lead lists).
+  retries: not documented
+  ordering: not documented
+  replay: not available
+
+security:
+  signing:
+    supported: true
+    optional: true
+    header: wappalyzer-signature
+    algorithm: SHA256
+    formula: sha256(secret + rawRequestBody)
+    verification: >-
+      Verbatim from the provider docs — "create a SHA256 hash of the signing secret appended with
+      the raw JSON request body. The request is valid if the hash matches the value in the
+      wappalyzer-signature header."
+    secret_management: >-
+      A signing secret is created in the Wappalyzer account. Signing is opt-in; the callback
+      parameter is declared `required: false` in the spec, so an unsigned callback is valid and
+      the consumer must decide whether to trust it.
+    docs: https://www.wappalyzer.com/docs/api/v2/basics/
+    weaknesses:
+      - Plain SHA256 concatenation rather than an HMAC, so it is vulnerable to length-extension in principle.
+      - No timestamp in the signed material, so a captured callback can be replayed.
+      - Opt-in, not on by default.
+    note: >-
+      Recorded as the provider publishes it. These are observations about the published scheme,
+      not a claim that Wappalyzer has been exploited.
+
+events:
+  - name: lookupCompleted
+    summary: Final asynchronous lookup result
+    trigger: >-
+      GET /lookup with recursive=true (and no cached record) accepts the request and returns
+      pending crawl markers; the completed technology profile is delivered here. Crawls take up
+      to 15 minutes.
+    method: POST
+    destination_expression: '{$request.query.callback_url}'
+    destination_source: callback_url query parameter on GET /lookup
+    payload_schema: LookupCompleted
+    spec: openapi/_original/wappalyzer-v2-public-openapi.yaml#/paths/~1lookup/get/callbacks/lookupCompleted
+    source_operation: lookupWebsites
+    consumer_responses:
+      - {status: 200, description: Callback accepted by the client.}
+      - {status: 400, description: Callback payload was rejected by the client.}
+    alternative: >-
+      Polling. The provider recommends re-querying the same lookup up to three times, five
+      minutes apart, if no callback destination is supplied.
+
+  - name: listReady
+    summary: Lead list ready callback
+    trigger: POST /lists — list generation is accepted and completes asynchronously.
+    method: POST
+    destination_expression: '{$request.body#/callbackUrl}'
+    destination_source: callbackUrl field on the CreateListRequest body
+    payload_schema: ListReadyCallback
+    payload_fields:
+      - {name: id, type: string, required: true, note: 'Lead list id, prefixed lst_'}
+      - {name: status, type: string, required: true, enum: [Ready]}
+      - {name: rows, type: object, note: Row counts keyed by segment.}
+      - {name: setRows, type: object, note: Row counts keyed by field set.}
+      - {name: totalCredits, type: integer, note: Credits the finalized list will cost.}
+      - {name: sampleUrl, type: string, format: uri, note: Download URL for the sample rows.}
+    spec: openapi/_original/wappalyzer-v2-public-openapi.yaml#/paths/~1lists/post/callbacks/listReady
+    source_operation: createLeadList
+    consumer_responses:
+      - {status: 200, description: Callback accepted by the client.}
+      - {status: 400, description: Callback payload was rejected by the client.}
+
+summary:
+  event_count: 2
+  signed: true
+  asyncapi_document: null
+  subscription_api: false
+  streaming_surface: false
+  note: >-
+    No AsyncAPI, no event bus, no streaming. The event surface is exactly two request-scoped
+    completion callbacks. Recorded honestly rather than modelled as a fuller event platform.
+
+x-evidence:
+  fetched: '2026-08-14'
+  evidence:
+    - {url: 'https://www.wappalyzer.com/openapi/v2-public.yaml', http_status: 200, detail: 'OpenAPI 3.1.0, two callbacks blocks'}
+    - {url: 'https://www.wappalyzer.com/docs/api/v2/basics/', http_status: 200, detail: 'Callback signatures section'}
+    - {url: 'https://www.wappalyzer.com/docs/integrations/webhooks/', http_status: 200, detail: 'SPA 404 shell — no standalone webhooks docs page exists'}

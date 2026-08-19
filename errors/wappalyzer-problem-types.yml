@@ -1,0 +1,106 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.wappalyzer.com/docs/api/v2/basics/
+sources:
+  - https://www.wappalyzer.com/docs/api/v2/basics/
+  - https://www.wappalyzer.com/openapi/v2-public.yaml
+  - openapi/_original/wappalyzer-v2-public-openapi.yaml
+format: bespoke
+rfc9457: false
+description: >-
+  Wappalyzer does not use RFC 9457 problem+json. Errors are plain JSON with an `errors` array of
+  human-readable strings, and the HTTP status carries the machine-readable meaning. The published
+  response-code table is short and deliberately coarse — notably there is no dedicated status for
+  credit exhaustion, which is folded into 403 alongside authentication failure.
+
+envelope:
+  content_type: application/json
+  shape: >-
+    Per-item on lookup: {"url": "...", "errors": ["Something went wrong"]}. The LookupError schema
+    in the published spec requires both `url` and `errors` (array of strings) and allows
+    additional properties.
+  error_field: errors
+  error_field_type: array of strings
+  code_field: null
+  note: >-
+    There is no error code vocabulary. A caller cannot branch on a stable identifier — only on
+    the HTTP status, or on matching English strings, which is brittle.
+  partial_failure: >-
+    GET /lookup returns an ARRAY of per-URL items. A single request for up to ten URLs can mix
+    LookupCompleted, LookupPending and LookupError items in one HTTP 200 response, so a 200 does
+    NOT mean every URL succeeded. Agents must inspect each array item.
+
+problems:
+  - status: 200
+    title: Completed, pending, or per-item error
+    detail: >-
+      "The request was completed successfully." Note the partial-failure caveat above — a 200 may
+      carry LookupError items for individual URLs.
+    applies_to: all operations
+    source: https://www.wappalyzer.com/docs/api/v2/basics/
+
+  - status: 400
+    name: BadRequest
+    title: The request payload or query string was invalid.
+    detail: >-
+      "There was an error with the request." Raised on malformed parameters — more than ten URLs,
+      a `sets` value outside the allowlist, a `limit` outside 10-1000 or not a multiple of 10,
+      a non-absolute URL.
+    retryable: false
+    remediation: Fix the request. Retrying unchanged will fail again.
+    applies_to: [getCreditBalance, lookupWebsites, lookupSubdomains, verifyEmail, listLeadLists, createLeadList, getLeadList, finalizeLeadList, deleteLeadList]
+    source: openapi/_original/wappalyzer-v2-public-openapi.yaml#/components/responses/BadRequest
+
+  - status: 403
+    name: Forbidden
+    title: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    detail: >-
+      "Authorization failure (incorrect API key, invalid method or resource or insufficient
+      credits)." Three distinct failure causes share one status.
+    retryable: conditional
+    remediation: >-
+      Ambiguous by design — check the x-api-key header, the path/method, AND the credit balance.
+      Call GET /credits/balance to disambiguate an exhausted balance from a bad key. An agent
+      cannot tell these apart from the status alone.
+    applies_to: all operations
+    source: openapi/_original/wappalyzer-v2-public-openapi.yaml#/components/responses/Forbidden
+    note: >-
+      Most APIs signal quota exhaustion with 402 or 429. Wappalyzer uses 403, so retry logic keyed
+      on 402/429 will not catch a depleted account here.
+
+  - status: 429
+    name: TooManyRequests
+    title: Rate limit exceeded.
+    detail: '"Rate limit exceeded."'
+    retryable: true
+    remediation: Back off and retry. No Retry-After header is declared in the published spec.
+    applies_to: all operations
+    source: openapi/_original/wappalyzer-v2-public-openapi.yaml#/components/responses/TooManyRequests
+
+  - status: 5xx
+    title: Temporary server-side failure
+    detail: >-
+      Not enumerated. The docs say verbatim: "In less common scenarios, other status codes may be
+      used. Treat any 2xx response as success, 4xx as a request or account issue to fix, and 5xx
+      as a temporary server-side failure."
+    retryable: true
+    source: https://www.wappalyzer.com/docs/api/v2/basics/
+
+unauthenticated_surface:
+  - status: 403
+    body: '{"message":"Missing Authentication Token"}'
+    detail: >-
+      Observed 2026-08-14 on any unmatched path under api.wappalyzer.com — an AWS API Gateway
+      catch-all, not a Wappalyzer application error. Do not mistake it for a documented 403.
+
+gaps:
+  - No error code vocabulary; only HTTP status plus free-text English strings.
+  - Credit exhaustion and bad credentials share HTTP 403.
+  - No 401 is used at all, so standard auth-challenge handling does not apply.
+  - No Retry-After header documented on 429.
+  - No RFC 9457 problem+json.
+
+summary:
+  problem_count: 5
+  documented_statuses: [200, 400, 403, 429]
+  format: bespoke-json-errors-array

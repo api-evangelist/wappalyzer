@@ -1,6 +1,8 @@
-generated: '2026-07-11'
+generated: '2026-08-14'
 method: derived
-source: openapi/wappalyzer-lookup-openapi.yml
+source: openapi/wappalyzer-basics-api-openapi.yml, openapi/wappalyzer-lists-api-openapi.yml,
+  openapi/wappalyzer-lookup-api-openapi.yml, openapi/wappalyzer-subdomains-api-openapi.yml,
+  openapi/wappalyzer-verify-api-openapi.yml
 summary:
   types:
   - apiKey
@@ -12,4 +14,8 @@ schemes:
   in: header
   parameter: x-api-key
   sources:
-  - openapi/wappalyzer-lookup-openapi.yml
+  - openapi/wappalyzer-basics-api-openapi.yml
+  - openapi/wappalyzer-lists-api-openapi.yml
+  - openapi/wappalyzer-lookup-api-openapi.yml
+  - openapi/wappalyzer-subdomains-api-openapi.yml
+  - openapi/wappalyzer-verify-api-openapi.yml

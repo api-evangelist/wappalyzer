@@ -1,0 +1,12 @@
+{
+  "resource": "https://mcp.wappalyzer.com/mcp",
+  "authorization_servers": [
+    "https://mcp.wappalyzer.com/"
+  ],
+  "scopes_supported": [
+    "mcp:tools",
+    "offline_access"
+  ],
+  "resource_name": "Wappalyzer",
+  "resource_documentation": "https://www.wappalyzer.com/docs/integrations/mcp/"
+}

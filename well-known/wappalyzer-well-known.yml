@@ -1,0 +1,123 @@
+generated: '2026-08-14'
+method: probed
+source: live probe of every host in apis.yml baseURL, Website, StatusPage and the hosted MCP endpoint
+description: >-
+  RFC 8615 /.well-known/ discovery probe across every Wappalyzer host. Two hosts serve real
+  documents: api.wappalyzer.com serves an RFC 9116 security.txt, and mcp.wappalyzer.com serves
+  RFC 8414 OAuth authorization-server metadata plus RFC 9728 OAuth protected-resource metadata
+  for the hosted MCP server. www.wappalyzer.com is a single-page app whose catch-all answers
+  HTTP 200 with the same 7,748-byte HTML shell for every /.well-known/* path — recorded as a
+  miss, not a hit.
+
+hosts:
+  - host: https://api.wappalyzer.com
+    role: API base host
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        content_type: text/plain; charset=utf-8
+        file: wappalyzer-security.txt
+        note: RFC 9116; Contact + Canonical + Preferred-Languages + Expires. No Policy field.
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 403
+      - path: /.well-known/agent-card.json
+        status: 403
+      - path: /.well-known/agent.json
+        status: 403
+
+  - host: https://mcp.wappalyzer.com
+    role: hosted MCP server host
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        content_type: application/json; charset=utf-8
+        file: wappalyzer-oauth-authorization-server.json
+        note: >-
+          RFC 8414. Issuer https://mcp.wappalyzer.com/, authorization_code + refresh_token,
+          PKCE S256 required, dynamic client registration at /oauth/register,
+          scopes mcp:tools + offline_access.
+      - path: /.well-known/oauth-protected-resource/mcp
+        status: 200
+        content_type: application/json; charset=utf-8
+        file: wappalyzer-oauth-protected-resource.json
+        note: >-
+          RFC 9728. Advertised by the 401 WWW-Authenticate challenge on POST /mcp
+          (resource_metadata=...). Resource https://mcp.wappalyzer.com/mcp.
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+        note: Only the resource-scoped path /.well-known/oauth-protected-resource/mcp is served.
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+
+  - host: https://www.wappalyzer.com
+    role: website + documentation host
+    spa_catch_all: true
+    note: >-
+      Every /.well-known/* path returns HTTP 200 with the 7,748-byte SPA HTML shell. These are
+      NOT documents and are recorded as misses. The one real machine-readable file on this host
+      is /llms.txt (text/plain), captured separately in llms/.
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        content_type: text/html
+        served: spa-shell
+        hit: false
+      - path: /.well-known/openid-configuration
+        status: 200
+        content_type: text/html
+        served: spa-shell
+        hit: false
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        content_type: text/html
+        served: spa-shell
+        hit: false
+      - path: /.well-known/api-catalog
+        status: 200
+        content_type: text/html
+        served: spa-shell
+        hit: false
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        content_type: text/html
+        served: spa-shell
+        hit: false
+      - path: /.well-known/agent-card.json
+        status: 200
+        content_type: text/html
+        served: spa-shell
+        hit: false
+      - path: /.well-known/agent.json
+        status: 200
+        content_type: text/html
+        served: spa-shell
+        hit: false
+
+summary:
+  real_documents: 3
+  security_txt: true
+  oauth_metadata: true
+  openid_configuration: false
+  api_catalog: false
+  ai_plugin: false
+  agent_card: false
+
+x-evidence:
+  fetched: '2026-08-14'
+  probes: 24
+  hosts_probed:
+    - api.wappalyzer.com
+    - www.wappalyzer.com
+    - mcp.wappalyzer.com
