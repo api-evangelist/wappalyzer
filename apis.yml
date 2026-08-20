@@ -60,6 +60,10 @@ apis:
   tags:
   - Web Crawling
   - Technology Detection
+  - AsyncAPI
+  tags_raw:
+  - Web Crawling
+  - Technology Detection
   - Async API
   properties:
   - type: Documentation
@@ -181,6 +185,8 @@ apis:
   humanURL: https://www.wappalyzer.com/docs/api/v2/lists/
   baseURL: https://api.wappalyzer.com
   tags:
+  - List
+  tags_raw:
   - Lists
   properties:
   - type: OpenAPI
