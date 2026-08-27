@@ -91,43 +91,14 @@ apis:
   contact:
   - FN: Wappalyzer Support
     url: https://www.wappalyzer.com/contact/
-- aid: wappalyzer:wappalyzer-public-api
-  name: Wappalyzer Public API
-  description: >-
-    The provider-published OpenAPI 3.1 contract for every documented public REST endpoint —
-    credit balance, technology lookup, lead lists, subdomain discovery and email verification —
-    including the two asynchronous completion callbacks. Downloaded verbatim from
-    https://www.wappalyzer.com/openapi/v2-public.yaml, which the provider links from its API
-    basics documentation as the machine-readable contract.
-  humanURL: https://www.wappalyzer.com/docs/api/v2/basics/
-  baseURL: https://api.wappalyzer.com/v2
-  tags:
-  - Technology Detection
-  - Lead Lists
-  - Subdomain Discovery
-  - Email Verification
-  properties:
-  - type: OpenAPI
-    url: openapi/_original/wappalyzer-v2-public-openapi.yaml
-  - type: Overlay
-    url: overlays/wappalyzer-v2-public-overlay.yaml
-  - type: Documentation
-    url: https://www.wappalyzer.com/docs/api/v2/basics/
-  - type: Webhooks
-    url: asyncapi/wappalyzer-webhooks.yml
-  - type: DataModel
-    url: data-model/wappalyzer-data-model.yml
-  contact:
-  - FN: Wappalyzer Support
-    url: https://www.wappalyzer.com/contact/
 - aid: wappalyzer:wappalyzer-metadata-api
   name: Wappalyzer Metadata API
   description: >-
-    The four anonymous, unauthenticated technology and category reference endpoints on the v2
-    host — the technology directory (7,281 entries), a single technology profile, the category
-    directory (106 entries) and a single category with its member technologies. Absent from the
-    published contract; located from the provider's own open-source MCP server and confirmed
-    live on 2026-08-14. Consumes no credits and requires no API key.
+    The four anonymous, unauthenticated technology and category reference endpoints on the v2 host — the
+    technology directory (7,281 entries), a single technology profile, the category directory (106 entries)
+    and a single category with its member technologies. Absent from the published contract; located from
+    the provider's own open-source MCP server and confirmed live on 2026-08-14. Consumes no credits and
+    requires no API key.
   humanURL: https://www.wappalyzer.com/technologies/
   baseURL: https://api.wappalyzer.com/v2
   tags:
@@ -145,10 +116,9 @@ apis:
 - aid: wappalyzer:wappalyzer-mcp
   name: Wappalyzer MCP Server
   description: >-
-    First-party hosted Model Context Protocol server at https://mcp.wappalyzer.com/mcp — remote
-    Streamable HTTP, OAuth 2.1 with PKCE and dynamic client registration, exposing three
-    read-only tools and four metadata resources. A first-party open-source local stdio server is
-    also published at github.com/wappalyzer/mcp.
+    First-party hosted Model Context Protocol server at https://mcp.wappalyzer.com/mcp — remote Streamable
+    HTTP, OAuth 2.1 with PKCE and dynamic client registration, exposing three read-only tools and four
+    metadata resources. A first-party open-source local stdio server is also published at github.com/wappalyzer/mcp.
   humanURL: https://www.wappalyzer.com/docs/integrations/mcp/
   baseURL: https://mcp.wappalyzer.com/mcp
   tags:
