@@ -73,7 +73,7 @@ apis:
   tags:
   - Web Crawling
   - Technology Detection
-  - Async API
+  - AsyncAPI
   tags_raw:
   - Web Crawling
   - Technology Detection
@@ -223,6 +223,9 @@ apis:
   - type: JSONSchema
     url: json-schema/wappalyzer-verify-result.json
 common:
+  - type: License
+    name: MIT
+    url: https://github.com/wappalyzer/mcp/blob/master/LICENSE
   - type: AgenticAccess
     url: agentic-access/wappalyzer-agentic-access.yml
   - type: DomainSecurity
