@@ -96,6 +96,11 @@ apis:
   humanURL: https://www.wappalyzer.com/docs/api/
   baseURL: https://api.wappalyzer.com
   tags:
+  - Datasets
+  - Bulk Data
+  - Market Research
+  - Lead Lists
+  tags_raw:
   - Dataset
   - Bulk Data
   - Market Research
