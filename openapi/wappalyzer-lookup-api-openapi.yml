@@ -1,14 +1,12 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wappalyzer Public Basics Lookup API
+  title: Wappalyzer Public Lookup API
   version: v2
   description: 'OpenAPI 3.0 contract for Wappalyzer''s documented public REST endpoints.
 
     Covers credit balance, technology lookup, lead lists, subdomain discovery,
 
-    and email verification.
-
-    '
+    and email verification.'
   license:
     name: Proprietary
     url: https://www.wappalyzer.com/terms/
@@ -31,9 +29,7 @@ paths:
       summary: Look up technologies and related website intelligence
       description: 'Looks up one or more websites. The response can complete synchronously
 
-        or return pending crawl markers when an asynchronous crawl is required.
-
-        '
+        or return pending crawl markers when an asynchronous crawl is required.'
       parameters:
       - $ref: '#/components/parameters/Urls'
       - $ref: '#/components/parameters/Live'
@@ -69,136 +65,7 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  parameters:
-    Squash:
-      name: squash
-      in: query
-      description: Merge monthly results into a single result set.
-      schema:
-        type: boolean
-        default: true
-    MinAge:
-      name: min_age
-      in: query
-      description: Return results verified at least this many months ago.
-      schema:
-        type: integer
-        minimum: 0
-    Urls:
-      name: urls
-      in: query
-      required: true
-      description: Between one and ten website URLs, comma separated. Multiple URLs are not supported with `recursive=false`.
-      schema:
-        type: array
-        minItems: 1
-        maxItems: 10
-        items:
-          type: string
-          format: uri
-      style: form
-      explode: false
-    MaxAge:
-      name: max_age
-      in: query
-      description: Return results verified within the last `max_age` months.
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 12
-        default: 2
-    Live:
-      name: live
-      in: query
-      description: Scan websites in real time instead of relying on cached results when needed.
-      schema:
-        type: boolean
-        default: false
-    CallbackUrl:
-      name: callback_url
-      in: query
-      description: Public callback URL that receives asynchronous lookup results.
-      schema:
-        type: string
-        format: uri
-    Denoise:
-      name: denoise
-      in: query
-      description: Exclude low-confidence detections.
-      schema:
-        type: boolean
-        default: true
-    Recursive:
-      name: recursive
-      in: query
-      description: Follow internal links for increased coverage. Asynchronous when true and a crawl is required.
-      schema:
-        type: boolean
-        default: true
-    Sets:
-      name: sets
-      in: query
-      description: Comma-separated list of additional result field sets to include. Use `signals` to request `technologySpend` and `trafficLevel`.
-      schema:
-        type: array
-        items:
-          type: string
-      style: form
-      explode: false
-    DebugEmail:
-      name: debug_email
-      in: query
-      description: Debug-only email address that receives callback troubleshooting information.
-      schema:
-        type: string
-        format: email
-  responses:
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
-    TooManyRequests:
-      description: Rate limit exceeded.
-    BadRequest:
-      description: The request payload or query string was invalid.
   schemas:
-    LookupPending:
-      type: object
-      required:
-      - url
-      - crawl
-      properties:
-        url:
-          type: string
-          format: uri
-        technologies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Technology'
-        crawl:
-          type: boolean
-    Technology:
-      type: object
-      required:
-      - slug
-      - name
-      properties:
-        slug:
-          type: string
-        name:
-          type: string
-        cpe:
-          type: string
-        versions:
-          type: array
-          items:
-            type: string
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-        trafficRank:
-          type: integer
-        confirmedAt:
-          type: integer
     LookupCompleted:
       type: object
       required:
@@ -230,6 +97,42 @@ components:
           - Medium
           - High
           - Very high
+    Technology:
+      type: object
+      required:
+      - slug
+      - name
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        cpe:
+          type: string
+        versions:
+          type: array
+          items:
+            type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        trafficRank:
+          type: integer
+        confirmedAt:
+          type: integer
+    Category:
+      type: object
+      required:
+      - slug
+      - name
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
     LookupError:
       type: object
       required:
@@ -243,18 +146,111 @@ components:
           type: array
           items:
             type: string
-    Category:
+    LookupPending:
       type: object
       required:
-      - slug
-      - name
+      - url
+      - crawl
       properties:
-        id:
-          type: integer
-        slug:
+        url:
           type: string
-        name:
+          format: uri
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Technology'
+        crawl:
+          type: boolean
+  parameters:
+    CallbackUrl:
+      name: callback_url
+      in: query
+      description: Public callback URL that receives asynchronous lookup results.
+      schema:
+        type: string
+        format: uri
+    Recursive:
+      name: recursive
+      in: query
+      description: Follow internal links for increased coverage. Asynchronous when true and a crawl is required.
+      schema:
+        type: boolean
+        default: true
+    MinAge:
+      name: min_age
+      in: query
+      description: Return results verified at least this many months ago.
+      schema:
+        type: integer
+        minimum: 0
+    Squash:
+      name: squash
+      in: query
+      description: Merge monthly results into a single result set.
+      schema:
+        type: boolean
+        default: true
+    Sets:
+      name: sets
+      in: query
+      description: Comma-separated list of additional result field sets to include. Use `signals` to request `technologySpend` and `trafficLevel`.
+      schema:
+        type: array
+        items:
           type: string
+      style: form
+      explode: false
+    Live:
+      name: live
+      in: query
+      description: Scan websites in real time instead of relying on cached results when needed.
+      schema:
+        type: boolean
+        default: false
+    Denoise:
+      name: denoise
+      in: query
+      description: Exclude low-confidence detections.
+      schema:
+        type: boolean
+        default: true
+    Urls:
+      name: urls
+      in: query
+      required: true
+      description: Between one and ten website URLs, comma separated. Multiple URLs are not supported with `recursive=false`.
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+          format: uri
+      style: form
+      explode: false
+    MaxAge:
+      name: max_age
+      in: query
+      description: Return results verified within the last `max_age` months.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 12
+        default: 2
+    DebugEmail:
+      name: debug_email
+      in: query
+      description: Debug-only email address that receives callback troubleshooting information.
+      schema:
+        type: string
+        format: email
+  responses:
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    TooManyRequests:
+      description: Rate limit exceeded.
+    BadRequest:
+      description: The request payload or query string was invalid.
   headers:
     CreditsRemaining:
       description: Remaining credit balance after the request completes.

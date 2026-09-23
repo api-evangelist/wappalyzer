@@ -1,14 +1,12 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wappalyzer Public Basics Lists API
+  title: Wappalyzer Public Lists API
   version: v2
   description: 'OpenAPI 3.0 contract for Wappalyzer''s documented public REST endpoints.
 
     Covers credit balance, technology lookup, lead lists, subdomain discovery,
 
-    and email verification.
-
-    '
+    and email verification.'
   license:
     name: Proprietary
     url: https://www.wappalyzer.com/terms/
@@ -251,76 +249,6 @@ components:
           - include
           - exclude
           - merge
-    ListSummary:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          pattern: ^lst_
-        createdAt:
-          type: integer
-        status:
-          $ref: '#/components/schemas/ListStatus'
-        totalCredits:
-          type: integer
-        technologies:
-          type: array
-          items:
-            $ref: '#/components/schemas/ListTechnology'
-        keywords:
-          type: array
-          items:
-            type: string
-        rows:
-          type: integer
-    FinalizeListResponse:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          pattern: ^lst_
-        status:
-          type: string
-          enum:
-          - Complete
-        url:
-          type: string
-          format: uri
-    ListStatus:
-      type: string
-      enum:
-      - Calculating
-      - Ready
-      - Failed
-      - Insufficient
-      - Complete
-    EmptyObject:
-      type: object
-    FinalizeListRequest:
-      type: object
-      required:
-      - spendCredits
-      properties:
-        spendCredits:
-          type: integer
-    Category:
-      type: object
-      required:
-      - slug
-      - name
-      properties:
-        id:
-          type: integer
-        slug:
-          type: string
-        name:
-          type: string
     ListDetail:
       type: object
       required:
@@ -379,8 +307,9 @@ components:
         maxAge:
           type: integer
         fromDate:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         requiredSets:
           type: array
           items:
@@ -394,15 +323,17 @@ components:
           items:
             type: string
         callbackUrl:
-          type: string
+          type:
+          - string
+          - 'null'
           format: uri
-          nullable: true
         totalCredits:
           type: integer
         url:
-          type: string
+          type:
+          - string
+          - 'null'
           format: uri
-          nullable: true
         sampleUrl:
           type: string
           format: uri
@@ -427,6 +358,68 @@ components:
           type: string
           enum:
           - Calculating
+    FinalizeListResponse:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        status:
+          type: string
+          enum:
+          - Complete
+        url:
+          type: string
+          format: uri
+    FinalizeListRequest:
+      type: object
+      required:
+      - spendCredits
+      properties:
+        spendCredits:
+          type: integer
+    EmptyObject:
+      type: object
+    Category:
+      type: object
+      required:
+      - slug
+      - name
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+    ListSummary:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        createdAt:
+          type: integer
+        status:
+          $ref: '#/components/schemas/ListStatus'
+        totalCredits:
+          type: integer
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListTechnology'
+        keywords:
+          type: array
+          items:
+            type: string
+        rows:
+          type: integer
     ListTechnology:
       type: object
       properties:
@@ -438,28 +431,28 @@ components:
           type: string
           pattern: ^[<>]?=$
         version:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         categories:
           type: array
           items:
             $ref: '#/components/schemas/Category'
+    ListStatus:
+      type: string
+      enum:
+      - Calculating
+      - Ready
+      - Failed
+      - Insufficient
+      - Complete
   responses:
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
     TooManyRequests:
       description: Rate limit exceeded.
     BadRequest:
       description: The request payload or query string was invalid.
-  headers:
-    CreditsRemaining:
-      description: Remaining credit balance after the request completes.
-      schema:
-        type: integer
-    CreditsSpent:
-      description: Number of credits deducted by the request.
-      schema:
-        type: integer
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
   parameters:
     ListId:
       name: id
@@ -469,6 +462,15 @@ components:
       schema:
         type: string
         pattern: ^lst_
+  headers:
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
+      schema:
+        type: integer
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

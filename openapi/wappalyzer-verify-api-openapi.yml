@@ -1,14 +1,12 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Wappalyzer Public Basics Verify API
+  title: Wappalyzer Public Verify API
   version: v2
   description: 'OpenAPI 3.0 contract for Wappalyzer''s documented public REST endpoints.
 
     Covers credit balance, technology lookup, lead lists, subdomain discovery,
 
-    and email verification.
-
-    '
+    and email verification.'
   license:
     name: Proprietary
     url: https://www.wappalyzer.com/terms/
@@ -50,13 +48,22 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  parameters:
+    Email:
+      name: email
+      in: query
+      required: true
+      description: Email address to verify.
+      schema:
+        type: string
+        format: email
   responses:
     TooManyRequests:
       description: Rate limit exceeded.
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
     BadRequest:
       description: The request payload or query string was invalid.
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
   schemas:
     VerifyResult:
       type: object
@@ -105,23 +112,14 @@ components:
         syntaxValid:
           type: boolean
   headers:
-    CreditsRemaining:
-      description: Remaining credit balance after the request completes.
-      schema:
-        type: integer
     CreditsSpent:
       description: Number of credits deducted by the request.
       schema:
         type: integer
-  parameters:
-    Email:
-      name: email
-      in: query
-      required: true
-      description: Email address to verify.
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
       schema:
-        type: string
-        format: email
+        type: integer
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
