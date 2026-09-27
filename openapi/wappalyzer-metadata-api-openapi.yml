@@ -138,28 +138,6 @@ paths:
           description: No category with that slug.
 components:
   schemas:
-    Group:
-      type: object
-      description: The high-level grouping a category belongs to.
-      properties:
-        id:
-          type: integer
-        slug:
-          type: string
-        name:
-          type: string
-    CategoryRef:
-      type: object
-      description: A category reference embedded on a technology.
-      properties:
-        id:
-          type: integer
-        slug:
-          type: string
-        name:
-          type: string
-        priority:
-          type: integer
     Technology:
       allOf:
       - $ref: '#/components/schemas/TechnologySummary'
@@ -221,6 +199,51 @@ components:
                   type: string
                 categoryName:
                   type: string
+    CategoryRef:
+      type: object
+      description: A category reference embedded on a technology.
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+        priority:
+          type: integer
+    Group:
+      type: object
+      description: The high-level grouping a category belongs to.
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+    CategoryDetail:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        technologies:
+          type: object
+          description: Member technologies keyed by slug.
+          additionalProperties:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              icon:
+                type: string
+              hits:
+                type: integer
+              hostnames:
+                type: integer
     TechnologySummary:
       type: object
       description: A technology as returned in the directory listing.
@@ -257,26 +280,3 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Group'
-    CategoryDetail:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/Group'
-        technologies:
-          type: object
-          description: Member technologies keyed by slug.
-          additionalProperties:
-            type: object
-            properties:
-              slug:
-                type: string
-              name:
-                type: string
-              icon:
-                type: string
-              hits:
-                type: integer
-              hostnames:
-                type: integer

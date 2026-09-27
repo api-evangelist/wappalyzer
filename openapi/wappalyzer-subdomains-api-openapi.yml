@@ -52,44 +52,14 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  parameters:
-    Domains:
-      name: domains
-      in: query
-      required: true
-      description: Between one and ten domain names, comma separated.
-      schema:
-        type: array
-        minItems: 1
-        maxItems: 10
-        items:
-          type: string
-      style: form
-      explode: false
-    After:
-      name: after
-      in: query
-      description: Resume pagination after the previous `moreAfter` value.
-      schema:
-        type: string
-    Limit:
-      name: limit
-      in: query
-      description: Maximum number of subdomains to return. Must be a multiple of 10.
-      schema:
-        type: integer
-        minimum: 10
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded.
+    BadRequest:
+      description: The request payload or query string was invalid.
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
   schemas:
-    SubdomainRecord:
-      type: object
-      required:
-      - createdAt
-      - updatedAt
-      properties:
-        createdAt:
-          type: integer
-        updatedAt:
-          type: integer
     SubdomainsResult:
       type: object
       required:
@@ -104,13 +74,16 @@ components:
             $ref: '#/components/schemas/SubdomainRecord'
         moreAfter:
           type: string
-  responses:
-    TooManyRequests:
-      description: Rate limit exceeded.
-    BadRequest:
-      description: The request payload or query string was invalid.
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    SubdomainRecord:
+      type: object
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: integer
+        updatedAt:
+          type: integer
   headers:
     CreditsSpent:
       description: Number of credits deducted by the request.
@@ -120,6 +93,33 @@ components:
       description: Remaining credit balance after the request completes.
       schema:
         type: integer
+  parameters:
+    Domains:
+      name: domains
+      in: query
+      required: true
+      description: Between one and ten domain names, comma separated.
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+      style: form
+      explode: false
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of subdomains to return. Must be a multiple of 10.
+      schema:
+        type: integer
+        minimum: 10
+    After:
+      name: after
+      in: query
+      description: Resume pagination after the previous `moreAfter` value.
+      schema:
+        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
