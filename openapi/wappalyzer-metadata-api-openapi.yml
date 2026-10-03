@@ -138,6 +138,50 @@ paths:
           description: No category with that slug.
 components:
   schemas:
+    TechnologySummary:
+      type: object
+      description: A technology as returned in the directory listing.
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        icon:
+          type: string
+          description: Icon file name.
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryRef'
+        versioned:
+          type: boolean
+          description: Whether Wappalyzer can detect a version for this technology.
+        hostnames:
+          type: integer
+          description: Number of hostnames observed running this technology.
+    CategoryDetail:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+        technologies:
+          type: object
+          description: Member technologies keyed by slug.
+          additionalProperties:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              icon:
+                type: string
+              hits:
+                type: integer
+              hostnames:
+                type: integer
     Technology:
       allOf:
       - $ref: '#/components/schemas/TechnologySummary'
@@ -199,72 +243,6 @@ components:
                   type: string
                 categoryName:
                   type: string
-    CategoryRef:
-      type: object
-      description: A category reference embedded on a technology.
-      properties:
-        id:
-          type: integer
-        slug:
-          type: string
-        name:
-          type: string
-        priority:
-          type: integer
-    Group:
-      type: object
-      description: The high-level grouping a category belongs to.
-      properties:
-        id:
-          type: integer
-        slug:
-          type: string
-        name:
-          type: string
-    CategoryDetail:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/Group'
-        technologies:
-          type: object
-          description: Member technologies keyed by slug.
-          additionalProperties:
-            type: object
-            properties:
-              slug:
-                type: string
-              name:
-                type: string
-              icon:
-                type: string
-              hits:
-                type: integer
-              hostnames:
-                type: integer
-    TechnologySummary:
-      type: object
-      description: A technology as returned in the directory listing.
-      properties:
-        slug:
-          type: string
-        name:
-          type: string
-        icon:
-          type: string
-          description: Icon file name.
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/CategoryRef'
-        versioned:
-          type: boolean
-          description: Whether Wappalyzer can detect a version for this technology.
-        hostnames:
-          type: integer
-          description: Number of hostnames observed running this technology.
     Category:
       type: object
       properties:
@@ -280,3 +258,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Group'
+    Group:
+      type: object
+      description: The high-level grouping a category belongs to.
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+    CategoryRef:
+      type: object
+      description: A category reference embedded on a technology.
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+        priority:
+          type: integer

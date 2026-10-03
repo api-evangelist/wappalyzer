@@ -47,12 +47,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
     TooManyRequests:
       description: Rate limit exceeded.
     BadRequest:
       description: The request payload or query string was invalid.
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
   headers:
     CreditsSpent:
       description: Number of credits deducted by the request.

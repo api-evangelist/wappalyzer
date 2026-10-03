@@ -49,12 +49,12 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   responses:
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
     TooManyRequests:
       description: Rate limit exceeded.
     BadRequest:
       description: The request payload or query string was invalid.
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
   headers:
     CreditsSpent:
       description: Number of credits deducted by the request.
@@ -64,6 +64,15 @@ components:
       description: Remaining credit balance after the request completes.
       schema:
         type: integer
+  parameters:
+    Email:
+      name: email
+      in: query
+      required: true
+      description: Email address to verify.
+      schema:
+        type: string
+        format: email
   schemas:
     VerifyResult:
       type: object
@@ -111,15 +120,6 @@ components:
           type: boolean
         syntaxValid:
           type: boolean
-  parameters:
-    Email:
-      name: email
-      in: query
-      required: true
-      description: Email address to verify.
-      schema:
-        type: string
-        format: email
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

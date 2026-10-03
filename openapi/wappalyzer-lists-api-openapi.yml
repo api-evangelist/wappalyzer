@@ -144,15 +144,6 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  headers:
-    CreditsRemaining:
-      description: Remaining credit balance after the request completes.
-      schema:
-        type: integer
-    CreditsSpent:
-      description: Number of credits deducted by the request.
-      schema:
-        type: integer
   schemas:
     CreateListRequest:
       type: object
@@ -258,6 +249,36 @@ components:
           - include
           - exclude
           - merge
+    ListStatus:
+      type: string
+      enum:
+      - Calculating
+      - Ready
+      - Failed
+      - Insufficient
+      - Complete
+    EmptyObject:
+      type: object
+    CreateListAccepted:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        status:
+          type: string
+          enum:
+          - Calculating
+    FinalizeListRequest:
+      type: object
+      required:
+      - spendCredits
+      properties:
+        spendCredits:
+          type: integer
     ListTechnology:
       type: object
       properties:
@@ -372,14 +393,34 @@ components:
           type: object
           additionalProperties:
             type: integer
-    ListStatus:
-      type: string
-      enum:
-      - Calculating
-      - Ready
-      - Failed
-      - Insufficient
-      - Complete
+    Category:
+      type: object
+      required:
+      - slug
+      - name
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+    FinalizeListResponse:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        status:
+          type: string
+          enum:
+          - Complete
+        url:
+          type: string
+          format: uri
     ListSummary:
       type: object
       required:
@@ -405,56 +446,13 @@ components:
             type: string
         rows:
           type: integer
-    EmptyObject:
-      type: object
-    FinalizeListRequest:
-      type: object
-      required:
-      - spendCredits
-      properties:
-        spendCredits:
-          type: integer
-    Category:
-      type: object
-      required:
-      - slug
-      - name
-      properties:
-        id:
-          type: integer
-        slug:
-          type: string
-        name:
-          type: string
-    CreateListAccepted:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          pattern: ^lst_
-        status:
-          type: string
-          enum:
-          - Calculating
-    FinalizeListResponse:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          pattern: ^lst_
-        status:
-          type: string
-          enum:
-          - Complete
-        url:
-          type: string
-          format: uri
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded.
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    BadRequest:
+      description: The request payload or query string was invalid.
   parameters:
     ListId:
       name: id
@@ -464,13 +462,15 @@ components:
       schema:
         type: string
         pattern: ^lst_
-  responses:
-    BadRequest:
-      description: The request payload or query string was invalid.
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
-    TooManyRequests:
-      description: Rate limit exceeded.
+  headers:
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
+      schema:
+        type: integer
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

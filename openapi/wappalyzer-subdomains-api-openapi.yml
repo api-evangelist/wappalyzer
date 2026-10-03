@@ -52,14 +52,17 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    TooManyRequests:
-      description: Rate limit exceeded.
-    BadRequest:
-      description: The request payload or query string was invalid.
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
   schemas:
+    SubdomainRecord:
+      type: object
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: integer
+        updatedAt:
+          type: integer
     SubdomainsResult:
       type: object
       required:
@@ -74,16 +77,13 @@ components:
             $ref: '#/components/schemas/SubdomainRecord'
         moreAfter:
           type: string
-    SubdomainRecord:
-      type: object
-      required:
-      - createdAt
-      - updatedAt
-      properties:
-        createdAt:
-          type: integer
-        updatedAt:
-          type: integer
+  responses:
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    TooManyRequests:
+      description: Rate limit exceeded.
+    BadRequest:
+      description: The request payload or query string was invalid.
   headers:
     CreditsSpent:
       description: Number of credits deducted by the request.
@@ -94,6 +94,13 @@ components:
       schema:
         type: integer
   parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of subdomains to return. Must be a multiple of 10.
+      schema:
+        type: integer
+        minimum: 10
     Domains:
       name: domains
       in: query
@@ -107,13 +114,6 @@ components:
           type: string
       style: form
       explode: false
-    Limit:
-      name: limit
-      in: query
-      description: Maximum number of subdomains to return. Must be a multiple of 10.
-      schema:
-        type: integer
-        minimum: 10
     After:
       name: after
       in: query
