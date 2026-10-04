@@ -145,6 +145,149 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
+    Category:
+      type: object
+      required:
+      - slug
+      - name
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+    FinalizeListRequest:
+      type: object
+      required:
+      - spendCredits
+      properties:
+        spendCredits:
+          type: integer
+    ListTechnology:
+      type: object
+      properties:
+        slug:
+          type: string
+        name:
+          type: string
+        operator:
+          type: string
+          pattern: ^[<>]?=$
+        version:
+          type:
+          - string
+          - 'null'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    EmptyObject:
+      type: object
+    ListDetail:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        createdAt:
+          type: integer
+        status:
+          $ref: '#/components/schemas/ListStatus'
+        technologies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListTechnology'
+        keywords:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        countries:
+          type: array
+          items:
+            type: string
+        industries:
+          type: array
+          items:
+            type: string
+        companySizes:
+          type: array
+          items:
+            type: integer
+        tlds:
+          type: array
+          items:
+            type: string
+        matchCountryLanguage:
+          type: boolean
+        matchTechnologies:
+          type: string
+          enum:
+          - or
+          - and
+          - not
+        subset:
+          type: integer
+        subsetSlice:
+          type: integer
+        minAge:
+          type: integer
+        maxAge:
+          type: integer
+        fromDate:
+          type:
+          - integer
+          - 'null'
+        requiredSets:
+          type: array
+          items:
+            type: string
+        excludeNoTraffic:
+          type: boolean
+        excludeMultilingual:
+          type: boolean
+        sets:
+          type: array
+          items:
+            type: string
+        callbackUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+        totalCredits:
+          type: integer
+        url:
+          type:
+          - string
+          - 'null'
+          format: uri
+        sampleUrl:
+          type: string
+          format: uri
+        rows:
+          type: object
+          additionalProperties:
+            type: integer
+        setRows:
+          type: object
+          additionalProperties:
+            type: integer
+    ListStatus:
+      type: string
+      enum:
+      - Calculating
+      - Ready
+      - Failed
+      - Insufficient
+      - Complete
     CreateListRequest:
       type: object
       properties:
@@ -249,16 +392,6 @@ components:
           - include
           - exclude
           - merge
-    ListStatus:
-      type: string
-      enum:
-      - Calculating
-      - Ready
-      - Failed
-      - Insufficient
-      - Complete
-    EmptyObject:
-      type: object
     CreateListAccepted:
       type: object
       required:
@@ -272,155 +405,6 @@ components:
           type: string
           enum:
           - Calculating
-    FinalizeListRequest:
-      type: object
-      required:
-      - spendCredits
-      properties:
-        spendCredits:
-          type: integer
-    ListTechnology:
-      type: object
-      properties:
-        slug:
-          type: string
-        name:
-          type: string
-        operator:
-          type: string
-          pattern: ^[<>]?=$
-        version:
-          type:
-          - string
-          - 'null'
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-    ListDetail:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          pattern: ^lst_
-        createdAt:
-          type: integer
-        status:
-          $ref: '#/components/schemas/ListStatus'
-        technologies:
-          type: array
-          items:
-            $ref: '#/components/schemas/ListTechnology'
-        keywords:
-          type: array
-          items:
-            type: string
-        languages:
-          type: array
-          items:
-            type: string
-        countries:
-          type: array
-          items:
-            type: string
-        industries:
-          type: array
-          items:
-            type: string
-        companySizes:
-          type: array
-          items:
-            type: integer
-        tlds:
-          type: array
-          items:
-            type: string
-        matchCountryLanguage:
-          type: boolean
-        matchTechnologies:
-          type: string
-          enum:
-          - or
-          - and
-          - not
-        subset:
-          type: integer
-        subsetSlice:
-          type: integer
-        minAge:
-          type: integer
-        maxAge:
-          type: integer
-        fromDate:
-          type:
-          - integer
-          - 'null'
-        requiredSets:
-          type: array
-          items:
-            type: string
-        excludeNoTraffic:
-          type: boolean
-        excludeMultilingual:
-          type: boolean
-        sets:
-          type: array
-          items:
-            type: string
-        callbackUrl:
-          type:
-          - string
-          - 'null'
-          format: uri
-        totalCredits:
-          type: integer
-        url:
-          type:
-          - string
-          - 'null'
-          format: uri
-        sampleUrl:
-          type: string
-          format: uri
-        rows:
-          type: object
-          additionalProperties:
-            type: integer
-        setRows:
-          type: object
-          additionalProperties:
-            type: integer
-    Category:
-      type: object
-      required:
-      - slug
-      - name
-      properties:
-        id:
-          type: integer
-        slug:
-          type: string
-        name:
-          type: string
-    FinalizeListResponse:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          pattern: ^lst_
-        status:
-          type: string
-          enum:
-          - Complete
-        url:
-          type: string
-          format: uri
     ListSummary:
       type: object
       required:
@@ -446,22 +430,22 @@ components:
             type: string
         rows:
           type: integer
-  responses:
-    TooManyRequests:
-      description: Rate limit exceeded.
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
-    BadRequest:
-      description: The request payload or query string was invalid.
-  parameters:
-    ListId:
-      name: id
-      in: path
-      required: true
-      description: Unique list identifier.
-      schema:
-        type: string
-        pattern: ^lst_
+    FinalizeListResponse:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          pattern: ^lst_
+        status:
+          type: string
+          enum:
+          - Complete
+        url:
+          type: string
+          format: uri
   headers:
     CreditsRemaining:
       description: Remaining credit balance after the request completes.
@@ -471,6 +455,22 @@ components:
       description: Number of credits deducted by the request.
       schema:
         type: integer
+  parameters:
+    ListId:
+      name: id
+      in: path
+      required: true
+      description: Unique list identifier.
+      schema:
+        type: string
+        pattern: ^lst_
+  responses:
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    BadRequest:
+      description: The request payload or query string was invalid.
+    TooManyRequests:
+      description: Rate limit exceeded.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

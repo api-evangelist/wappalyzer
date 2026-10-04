@@ -46,22 +46,22 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
-    TooManyRequests:
-      description: Rate limit exceeded.
-    BadRequest:
-      description: The request payload or query string was invalid.
   headers:
-    CreditsSpent:
-      description: Number of credits deducted by the request.
-      schema:
-        type: integer
     CreditsRemaining:
       description: Remaining credit balance after the request completes.
       schema:
         type: integer
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
+  responses:
+    BadRequest:
+      description: The request payload or query string was invalid.
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    TooManyRequests:
+      description: Rate limit exceeded.
   schemas:
     CreditsBalance:
       type: object

@@ -52,6 +52,49 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  headers:
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
+      schema:
+        type: integer
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
+  responses:
+    BadRequest:
+      description: The request payload or query string was invalid.
+    Forbidden:
+      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
+    TooManyRequests:
+      description: Rate limit exceeded.
+  parameters:
+    After:
+      name: after
+      in: query
+      description: Resume pagination after the previous `moreAfter` value.
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of subdomains to return. Must be a multiple of 10.
+      schema:
+        type: integer
+        minimum: 10
+    Domains:
+      name: domains
+      in: query
+      required: true
+      description: Between one and ten domain names, comma separated.
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+      style: form
+      explode: false
   schemas:
     SubdomainRecord:
       type: object
@@ -77,49 +120,6 @@ components:
             $ref: '#/components/schemas/SubdomainRecord'
         moreAfter:
           type: string
-  responses:
-    Forbidden:
-      description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
-    TooManyRequests:
-      description: Rate limit exceeded.
-    BadRequest:
-      description: The request payload or query string was invalid.
-  headers:
-    CreditsSpent:
-      description: Number of credits deducted by the request.
-      schema:
-        type: integer
-    CreditsRemaining:
-      description: Remaining credit balance after the request completes.
-      schema:
-        type: integer
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      description: Maximum number of subdomains to return. Must be a multiple of 10.
-      schema:
-        type: integer
-        minimum: 10
-    Domains:
-      name: domains
-      in: query
-      required: true
-      description: Between one and ten domain names, comma separated.
-      schema:
-        type: array
-        minItems: 1
-        maxItems: 10
-        items:
-          type: string
-      style: form
-      explode: false
-    After:
-      name: after
-      in: query
-      description: Resume pagination after the previous `moreAfter` value.
-      schema:
-        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
