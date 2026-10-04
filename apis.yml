@@ -46,6 +46,7 @@ tags:
   - Subdomain Discovery
   - Email Verification
   - Market Research
+  - Data Enrichment
 
 apis:
 - name: Wappalyzer Analyze API
