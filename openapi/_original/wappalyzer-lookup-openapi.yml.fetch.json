@@ -1,0 +1,12 @@
+{
+ "url": "https://www.wappalyzer.com/openapi/v2-public.yaml",
+ "requested_url": "https://www.wappalyzer.com/openapi/v2-public.yaml",
+ "status": 200,
+ "content_type": "application/yaml",
+ "bytes": 25708,
+ "sha256": "e22fbf7052733ece4d60b4daaf0c2be6a9cb0d896280797efe5a801c2128c73c",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
