@@ -65,7 +65,23 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  headers:
+    CreditsSpent:
+      description: Number of credits deducted by the request.
+      schema:
+        type: integer
+    CreditsRemaining:
+      description: Remaining credit balance after the request completes.
+      schema:
+        type: integer
   parameters:
+    Denoise:
+      name: denoise
+      in: query
+      description: Exclude low-confidence detections.
+      schema:
+        type: boolean
+        default: true
     DebugEmail:
       name: debug_email
       in: query
@@ -80,44 +96,6 @@ components:
       schema:
         type: boolean
         default: false
-    CallbackUrl:
-      name: callback_url
-      in: query
-      description: Public callback URL that receives asynchronous lookup results.
-      schema:
-        type: string
-        format: uri
-    MinAge:
-      name: min_age
-      in: query
-      description: Return results verified at least this many months ago.
-      schema:
-        type: integer
-        minimum: 0
-    Recursive:
-      name: recursive
-      in: query
-      description: Follow internal links for increased coverage. Asynchronous when true and a crawl is required.
-      schema:
-        type: boolean
-        default: true
-    Denoise:
-      name: denoise
-      in: query
-      description: Exclude low-confidence detections.
-      schema:
-        type: boolean
-        default: true
-    Sets:
-      name: sets
-      in: query
-      description: Comma-separated list of additional result field sets to include. Use `signals` to request `technologySpend` and `trafficLevel`.
-      schema:
-        type: array
-        items:
-          type: string
-      style: form
-      explode: false
     Squash:
       name: squash
       in: query
@@ -125,6 +103,13 @@ components:
       schema:
         type: boolean
         default: true
+    CallbackUrl:
+      name: callback_url
+      in: query
+      description: Public callback URL that receives asynchronous lookup results.
+      schema:
+        type: string
+        format: uri
     MaxAge:
       name: max_age
       in: query
@@ -134,6 +119,20 @@ components:
         minimum: 1
         maximum: 12
         default: 2
+    Recursive:
+      name: recursive
+      in: query
+      description: Follow internal links for increased coverage. Asynchronous when true and a crawl is required.
+      schema:
+        type: boolean
+        default: true
+    MinAge:
+      name: min_age
+      in: query
+      description: Return results verified at least this many months ago.
+      schema:
+        type: integer
+        minimum: 0
     Urls:
       name: urls
       in: query
@@ -148,32 +147,41 @@ components:
           format: uri
       style: form
       explode: false
-  schemas:
-    LookupError:
-      type: object
-      required:
-      - url
-      - errors
-      properties:
-        url:
+    Sets:
+      name: sets
+      in: query
+      description: Comma-separated list of additional result field sets to include. Use `signals` to request `technologySpend` and `trafficLevel`.
+      schema:
+        type: array
+        items:
           type: string
-          format: uri
-        errors:
-          type: array
-          items:
-            type: string
-    Category:
+      style: form
+      explode: false
+  schemas:
+    Technology:
       type: object
       required:
       - slug
       - name
       properties:
-        id:
-          type: integer
         slug:
           type: string
         name:
           type: string
+        cpe:
+          type: string
+        versions:
+          type: array
+          items:
+            type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        trafficRank:
+          type: integer
+        confirmedAt:
+          type: integer
     LookupCompleted:
       type: object
       required:
@@ -220,46 +228,38 @@ components:
             $ref: '#/components/schemas/Technology'
         crawl:
           type: boolean
-    Technology:
+    LookupError:
+      type: object
+      required:
+      - url
+      - errors
+      properties:
+        url:
+          type: string
+          format: uri
+        errors:
+          type: array
+          items:
+            type: string
+    Category:
       type: object
       required:
       - slug
       - name
       properties:
+        id:
+          type: integer
         slug:
           type: string
         name:
           type: string
-        cpe:
-          type: string
-        versions:
-          type: array
-          items:
-            type: string
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-        trafficRank:
-          type: integer
-        confirmedAt:
-          type: integer
   responses:
-    BadRequest:
-      description: The request payload or query string was invalid.
     Forbidden:
       description: Authorization failed, the resource or method is invalid, or the account lacks sufficient credits.
     TooManyRequests:
       description: Rate limit exceeded.
-  headers:
-    CreditsRemaining:
-      description: Remaining credit balance after the request completes.
-      schema:
-        type: integer
-    CreditsSpent:
-      description: Number of credits deducted by the request.
-      schema:
-        type: integer
+    BadRequest:
+      description: The request payload or query string was invalid.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
